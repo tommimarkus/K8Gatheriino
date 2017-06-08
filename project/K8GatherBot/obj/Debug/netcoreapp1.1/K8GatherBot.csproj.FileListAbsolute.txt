@@ -1,0 +1,19 @@
+c:\users\niki\documents\visual studio 2017\Projects\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.deps.json
+c:\users\niki\documents\visual studio 2017\Projects\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.runtimeconfig.json
+c:\users\niki\documents\visual studio 2017\Projects\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.runtimeconfig.dev.json
+c:\users\niki\documents\visual studio 2017\Projects\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.dll
+c:\users\niki\documents\visual studio 2017\Projects\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.csprojResolveAssemblyReference.cache
+c:\users\niki\documents\visual studio 2017\Projects\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.AssemblyInfo.cs
+C:\Users\Niki\Documents\Visual Studio 2017\Projects\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Documents\Visual Studio 2017\Projects\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.dll
+C:\Users\Niki\Documents\Visual Studio 2017\Projects\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.deps.json
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.runtimeconfig.json
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.runtimeconfig.dev.json
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.dll
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\bin\Debug\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.AssemblyInfo.cs
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.dll
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.Properties.Resources.resources
+C:\Users\Niki\Desktop\K8GatherBot\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.csproj.GenerateResource.Cache
