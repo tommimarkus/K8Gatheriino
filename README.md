@@ -16,7 +16,7 @@ Originally for Overwatch, but as the team size can be changed, works with any te
 
 # Details
 
-Bot is running on Discore 2.3.0 (https://github.com/BundledSticksInkorperated/Discore)
+Bot is running on Discore 2.4.0 (https://github.com/BundledSticksInkorperated/Discore)
 
 Project is running on .NET Core 1.1 / .NET Standard 1.6
 
