@@ -1,21 +1,21 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.1",
-    "signature": "74cd6816d2693d1f16f6f1456efee77069bb6b6c"
+    "signature": "3605fd551f22a3fa6b51a0487cc444d65a57e82e"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.1": {
       "k8gatherbot/1.0.0": {
         "dependencies": {
-          "Discore": "2.4.0",
+          "Discore": "2.3.0",
           "Microsoft.Extensions.Configuration.Json": "1.1.2"
         },
         "runtime": {
           "K8GatherBot.dll": {}
         }
       },
-      "discore/2.4.0": {
+      "discore/2.3.0": {
         "dependencies": {
           "Newtonsoft.Json": "10.0.1",
           "Nito.AsyncEx.Coordination": "1.0.2",
@@ -209,12 +209,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "discore/2.4.0": {
+    "discore/2.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-zJA6/l2R/5CEAwuzKlGZYX9LZMH3m86hp8ahSfc+yo1eWXmAA4PVHAUNYdTKPrtBmt73FHqEvu5S7AsUAOL8EQ==",
-      "path": "discore/2.4.0",
-      "hashPath": "discore.2.4.0.nupkg.sha512"
+      "sha512": "sha512-umHBySgt6o3/WNBcFoGSi9YVXWFN1dLkWRKwsp5Wvh2LYJbT0Mco7X2DDujdqiPld+19YBSsJV82cEi8u5Qxgw==",
+      "path": "discore/2.3.0",
+      "hashPath": "discore.2.3.0.nupkg.sha512"
     },
     "microsoft.extensions.configuration/1.1.2": {
       "type": "package",
