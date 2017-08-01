@@ -7955,10 +7955,10 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Niki\\Desktop\\project\\K8GatherBot\\K8GatherBot.csproj",
+      "projectUniqueName": "C:\\Users\\Niki\\Desktop\\K8GatherBot\\project\\K8GatherBot\\K8GatherBot.csproj",
       "projectName": "K8GatherBot",
-      "projectPath": "C:\\Users\\Niki\\Desktop\\project\\K8GatherBot\\K8GatherBot.csproj",
-      "outputPath": "C:\\Users\\Niki\\Desktop\\project\\K8GatherBot\\obj\\",
+      "projectPath": "C:\\Users\\Niki\\Desktop\\K8GatherBot\\project\\K8GatherBot\\K8GatherBot.csproj",
+      "outputPath": "C:\\Users\\Niki\\Desktop\\K8GatherBot\\project\\K8GatherBot\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"
@@ -7978,7 +7978,7 @@
           },
           "Discore": {
             "target": "Package",
-            "version": "[2.4.1, )"
+            "version": "2.4.1"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",

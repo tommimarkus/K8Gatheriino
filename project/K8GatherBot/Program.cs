@@ -90,6 +90,8 @@ namespace K8GatherBot
             public static string txt32 = "Removed because status is ***Offline***";
             public static string txt33 = "Starting Readycheck timer, you have 60 seconds to ***!ready*** yourself.";
             public static string txt34 = "Not all players were ready during the readycheck. Returning to queue with players that were ready.";
+
+            public static string txt35 = "You have already readied!";
         }
 
         public static void Main(string[] args)
@@ -155,6 +157,7 @@ namespace K8GatherBot
                 ProgHelpers.txt32 = "Poistettu koska käyttäjä on ***OFFLINE***.";
                 ProgHelpers.txt33 = "Aloitetaan readycheck. Teillä on 60 sekuntia aikaa käyttää ***!ready*** komentoa.";
                 ProgHelpers.txt34 = "Kaikki pelaajat eivät olleet valmiita readycheckin aikana. Palataan jonoon valmiina olleiden pelaajien kanssa.";
+                ProgHelpers.txt35 = "Olet jo merkinnyt itsesi valmiiksi!";
             }
             Program program = new Program();
             program.Run().Wait();
@@ -416,81 +419,94 @@ namespace K8GatherBot
                             }
                             else
                             {
-                                //place person in readycheck queue
-                                ProgHelpers.readycheckids.Add(aa);
-                                ProgHelpers.readycheck.Add(bb);
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt9+" "+ ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                                //if readycheck completes the queue, start captainpick phase, clear readycheck queue in process
-                                if (ProgHelpers.readycheckids.Count == ProgHelpers.qcount)
+                                //01.08.2017 Check if person has ALREADY readied...
+                                var checkExists = ProgHelpers.readycheckids.FirstOrDefault(x => x == aa);
+                                if (checkExists != null)
                                 {
-                                    //dispose of the currenttimer
-                                    _tm.Dispose();
-                                    ProgHelpers._counter = 0;
-                                    
-                                    //Dispose readychecks
-                                    ProgHelpers.readycheckids.Clear();
-                                    ProgHelpers.readycheck.Clear();
-
-                                    //Random captain 1
-                                    Random rnd = new Random();
-                                    int c1 = rnd.Next(ProgHelpers.queueids.Count);
-                                    string c1n = "";
-                                    string c1i = "";
-
-                                    c1n = ProgHelpers.queue[c1];
-                                    c1i = ProgHelpers.queueids[c1];
-                                    ProgHelpers.queue.RemoveAt(c1);
-                                    ProgHelpers.queueids.RemoveAt(c1);
-                                    ProgHelpers.captain1 = c1n;
-                                    ProgHelpers.captain1id = c1i;
-                                    ProgHelpers.team1.Add(c1n);
-                                    ProgHelpers.team1ids.Add(c1i);
-
-                                    //Random captain 2
-                                    Random rnd2 = new Random();
-                                    int c2 = rnd2.Next(ProgHelpers.queueids.Count);
-                                    string c2n = "";
-                                    string c2i = "";
-
-                                    c2n = ProgHelpers.queue[c2];
-                                    c2i = ProgHelpers.queueids[c2];
-                                    ProgHelpers.queue.RemoveAt(c2);
-                                    ProgHelpers.queueids.RemoveAt(c2);
-                                    ProgHelpers.captain2 = c2n;
-                                    ProgHelpers.captain2id = c2i;
-                                    ProgHelpers.team2.Add(c2n);
-                                    ProgHelpers.team2ids.Add(c2i);
-                                    
-                                    //Workaround to keep the initial numbering active for whole draft
-                                    ProgHelpers.draftchatids.AddRange(ProgHelpers.queueids);
-                                    List<string> draftlist = new List<string>();
-                                    int qcount = 0;
-                                    foreach (string item in ProgHelpers.queue)
-                                    {
-                                        draftlist.Add(qcount.ToString() + " - " + item);
-                                        qcount++;
-                                    }
-                                    ProgHelpers.draftchatnames.AddRange(draftlist);
-
-                                    Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
-                                    Console.WriteLine(ProgHelpers.draftchatids.Cast<string>().ToArray());
-
-                                    ProgHelpers.pickturn = ProgHelpers.captain1id; //initial pickturn
-
-
-                                    List<string> phlist = new List<string>();
-                                    int count = 0;
-                                    foreach (string item in ProgHelpers.queue)
-                                    {
-                                        phlist.Add(count.ToString() + " - " + item);
-                                        count++;
-                                    }
-
-                                    await textChannel.CreateMessage(ProgHelpers.txt10+" " + "<@" + c1i + ">" + "\n"+ProgHelpers.txt11+" "+ "<@" + c2i + ">" + "\n"+ProgHelpers.txt12+"\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
-
-
-
+                                    //Person has already readied
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt35 + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                 }
+                                else
+                                {
+                                    //Proceed
+
+                                    //place person in readycheck queue
+                                    ProgHelpers.readycheckids.Add(aa);
+                                    ProgHelpers.readycheck.Add(bb);
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt9 + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                    //if readycheck completes the queue, start captainpick phase, clear readycheck queue in process
+                                    if (ProgHelpers.readycheckids.Count == ProgHelpers.qcount)
+                                    {
+                                        //dispose of the currenttimer
+                                        _tm.Dispose();
+                                        ProgHelpers._counter = 0;
+
+                                        //Dispose readychecks
+                                        ProgHelpers.readycheckids.Clear();
+                                        ProgHelpers.readycheck.Clear();
+
+                                        //Random captain 1
+                                        Random rnd = new Random();
+                                        int c1 = rnd.Next(ProgHelpers.queueids.Count);
+                                        string c1n = "";
+                                        string c1i = "";
+
+                                        c1n = ProgHelpers.queue[c1];
+                                        c1i = ProgHelpers.queueids[c1];
+                                        ProgHelpers.queue.RemoveAt(c1);
+                                        ProgHelpers.queueids.RemoveAt(c1);
+                                        ProgHelpers.captain1 = c1n;
+                                        ProgHelpers.captain1id = c1i;
+                                        ProgHelpers.team1.Add(c1n);
+                                        ProgHelpers.team1ids.Add(c1i);
+
+                                        //Random captain 2
+                                        Random rnd2 = new Random();
+                                        int c2 = rnd2.Next(ProgHelpers.queueids.Count);
+                                        string c2n = "";
+                                        string c2i = "";
+
+                                        c2n = ProgHelpers.queue[c2];
+                                        c2i = ProgHelpers.queueids[c2];
+                                        ProgHelpers.queue.RemoveAt(c2);
+                                        ProgHelpers.queueids.RemoveAt(c2);
+                                        ProgHelpers.captain2 = c2n;
+                                        ProgHelpers.captain2id = c2i;
+                                        ProgHelpers.team2.Add(c2n);
+                                        ProgHelpers.team2ids.Add(c2i);
+
+                                        //Workaround to keep the initial numbering active for whole draft
+                                        ProgHelpers.draftchatids.AddRange(ProgHelpers.queueids);
+                                        List<string> draftlist = new List<string>();
+                                        int qcount = 0;
+                                        foreach (string item in ProgHelpers.queue)
+                                        {
+                                            draftlist.Add(qcount.ToString() + " - " + item);
+                                            qcount++;
+                                        }
+                                        ProgHelpers.draftchatnames.AddRange(draftlist);
+
+                                        Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
+                                        Console.WriteLine(ProgHelpers.draftchatids.Cast<string>().ToArray());
+
+                                        ProgHelpers.pickturn = ProgHelpers.captain1id; //initial pickturn
+
+
+                                        List<string> phlist = new List<string>();
+                                        int count = 0;
+                                        foreach (string item in ProgHelpers.queue)
+                                        {
+                                            phlist.Add(count.ToString() + " - " + item);
+                                            count++;
+                                        }
+
+                                        await textChannel.CreateMessage(ProgHelpers.txt10 + " " + "<@" + c1i + ">" + "\n" + ProgHelpers.txt11 + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.txt12 + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
+
+
+
+                                    }
+                                }
+                                
                             }
                         }
                         else
@@ -515,8 +531,8 @@ namespace K8GatherBot
                         ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                         if (message.Author.Id.Id.ToString() == ProgHelpers.pickturn)
                         {
-
-
+                            
+                            
                             //pickturn for team1
                             if (ProgHelpers.pickturn == ProgHelpers.captain1id)
                             {
@@ -632,6 +648,49 @@ namespace K8GatherBot
                                 //if exists, place index in other list. 
 
                             }
+
+                            //01.08.2017 Check if queue has only one player left, if so, put it in team
+                            //This should lead to the queue completing in this loop
+                            if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count == (ProgHelpers.qcount - 1))
+                            {
+                                //Find out team that is picking
+                                if (ProgHelpers.pickturn == ProgHelpers.captain1id)
+                                {
+                                    //Team1 is picking
+                                    //Find out the remaining player
+                                    var remainingPlayer = ProgHelpers.draftchatids.FirstOrDefault();
+                                    var remainingPlayerIndex = ProgHelpers.queueids.IndexOf(remainingPlayer);
+                                    var remainingPlayername = ProgHelpers.queue.ElementAtOrDefault(remainingPlayerIndex);
+
+                                    //Put remaining player in picking team (pickturn has already gotten a new value above)
+                                    ProgHelpers.team1.Add(remainingPlayername);
+                                    ProgHelpers.team1ids.Add(remainingPlayer);
+
+                                    //Clear draftchat names (you could say this is redundant but..)
+                                    ProgHelpers.draftchatnames.Clear();
+                                    ProgHelpers.draftchatids.Clear();
+
+                                }
+                                else
+                                {
+                                    //Team2 is picking
+                                    //Find out the remaining player
+                                    var remainingPlayer = ProgHelpers.draftchatids.FirstOrDefault();
+                                    var remainingPlayerIndex = ProgHelpers.queueids.IndexOf(remainingPlayer);
+                                    var remainingPlayername = ProgHelpers.queue.ElementAtOrDefault(remainingPlayerIndex);
+
+                                    //Put remaining player in picking team (pickturn has already gotten a new value above)
+                                    ProgHelpers.team2.Add(remainingPlayername);
+                                    ProgHelpers.team2ids.Add(remainingPlayer);
+
+                                    //Clear draftchat names (you could say this is redundant but..)
+                                    ProgHelpers.draftchatnames.Clear();
+                                    ProgHelpers.draftchatids.Clear();
+                                }
+
+
+                            }
+
                             //if queue completes with this pick, announce teams
                             if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count == ProgHelpers.qcount)
                             {

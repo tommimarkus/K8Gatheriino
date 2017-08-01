@@ -20,3 +20,14 @@ C:\Users\Niki\Desktop\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.
 C:\Users\Niki\Desktop\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.AssemblyInfo.cs
 C:\Users\Niki\Desktop\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.dll
 C:\Users\Niki\Desktop\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\bin\Release\netcoreapp1.1\K8GatherBot.deps.json
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\bin\Release\netcoreapp1.1\K8GatherBot.runtimeconfig.json
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\bin\Release\netcoreapp1.1\K8GatherBot.runtimeconfig.dev.json
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\bin\Release\netcoreapp1.1\K8GatherBot.dll
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\bin\Release\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.csprojResolveAssemblyReference.cache
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.Properties.Resources.resources
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.csproj.GenerateResource.Cache
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.AssemblyInfo.cs
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.dll
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Release\netcoreapp1.1\K8GatherBot.pdb
