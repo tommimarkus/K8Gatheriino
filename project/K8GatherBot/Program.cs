@@ -571,7 +571,7 @@ namespace K8GatherBot
                                             //post the remaining players, take into account that last player in the queue is being automatically added
                                             if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                             {
-                                                await textChannel.CreateMessage($"<@{message.Author.Id}>"+ProgHelpers.txt14+" <@" + ProgHelpers.captain2id + "> \n "+ProgHelpers.txt15+" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
+                                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt14+" <@" + ProgHelpers.captain2id + "> \n "+ProgHelpers.txt15+" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                             }
                                         }
                                         else
