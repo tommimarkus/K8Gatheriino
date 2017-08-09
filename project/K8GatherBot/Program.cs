@@ -568,8 +568,8 @@ namespace K8GatherBot
 
                                             Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
 
-                                            //post the remaining players
-                                            if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != ProgHelpers.qcount)
+                                            //post the remaining players, take into account that last player in the queue is being automatically added
+                                            if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                             {
                                                 await textChannel.CreateMessage($"<@{message.Author.Id}>"+ProgHelpers.txt14+" <@" + ProgHelpers.captain2id + "> \n "+ProgHelpers.txt15+" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                             }
@@ -625,8 +625,8 @@ namespace K8GatherBot
                                             ProgHelpers.draftchatids.RemoveAt(finderremover);
 
                                             Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
-                                            //post the remaining players
-                                            if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != ProgHelpers.qcount)
+                                            //post the remaining players, take into account that last player in the queue is being automatically added
+                                            if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                             {
                                                 await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt14x+ "<@" + ProgHelpers.captain1id + "> \n "+ProgHelpers.txt15+" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                             }
