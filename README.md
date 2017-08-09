@@ -1,6 +1,8 @@
 # K8Gatheriino
 ![alt text](https://github.com/kitsun8/K8Gatheriino/blob/master/screenshots/gatheriino1.PNG)
+
 ![alt text](https://github.com/kitsun8/K8Gatheriino/blob/master/screenshots/gatheriino3.PNG)
+
 ![alt text](https://github.com/kitsun8/K8Gatheriino/blob/master/screenshots/gatheriino4.PNG)
 
 A bot for Discord that helps people to form pickup games (PUGs).
