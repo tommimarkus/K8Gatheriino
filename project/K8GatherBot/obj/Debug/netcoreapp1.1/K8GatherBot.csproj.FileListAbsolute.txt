@@ -47,3 +47,4 @@ C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Debug\netcoreapp1.1\K8
 C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.AssemblyInfo.cs
 C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.dll
 C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.pdb
+C:\Users\Niki\Desktop\K8GatherBot\project\K8GatherBot\obj\Debug\netcoreapp1.1\K8GatherBot.csprojResolveAssemblyReference.cache

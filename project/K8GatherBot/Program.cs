@@ -90,6 +90,7 @@ namespace K8GatherBot
             public static string txt32 = "Removed because status is ***Offline***";
             public static string txt33 = "Starting Readycheck timer, you have 60 seconds to ***!ready*** yourself.";
             public static string txt34 = "Not all players were ready during the readycheck. Returning to queue with players that were ready.";
+            public static string txt36 = "Wait until the picking phase is over.";
 
             public static string txt35 = "You have already readied!";
         }
@@ -158,6 +159,7 @@ namespace K8GatherBot
                 ProgHelpers.txt33 = "Aloitetaan readycheck. Teillä on 60 sekuntia aikaa käyttää ***!ready*** komentoa.";
                 ProgHelpers.txt34 = "Kaikki pelaajat eivät olleet valmiita readycheckin aikana. Palataan jonoon valmiina olleiden pelaajien kanssa.";
                 ProgHelpers.txt35 = "Olet jo merkinnyt itsesi valmiiksi!";
+                ProgHelpers.txt36 = "Odota poimintavaiheen päättymistä!";
             }
             Program program = new Program();
             program.Run().Wait();
@@ -194,6 +196,7 @@ namespace K8GatherBot
             ITextChannel textChannel = (ITextChannel)shard.Application.HttpApi.Channels.CreateMessage(xx, ProgHelpers.txt34);
             await shard.StopAsync();
         }
+
         //------------------------------------------------------------------------Timer for ready check
         public static Timer _tm = null;
         public static AutoResetEvent _autoEvent = null;
@@ -259,47 +262,9 @@ namespace K8GatherBot
 
             if (message.ChannelId.Id.ToString() == ProgHelpers.usechannel)//Prevent DM abuse, only react to messages sent on a set channel.
             {
-                //--------------------------------------------------------------------------------------------------------QUEUECHECKER-run on each message before draft
-                //Check offline status for ids in the queue
-                //if offline, delete from lists
-                //run this at all functions touching the queue, before picking phase 
-                //async Task Offlinecheck()
-                //{
-                //    ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
-                //    int cnt = 0;
-                //    foreach (string item in ProgHelpers.queueids)
-                //    {
-                //        Snowflake pollid = new Snowflake();
-                //        ulong pidhlp = (ulong)Convert.ToInt64(ProgHelpers.queueids[cnt]);
-                //        pollid.Id = pidhlp;
-
-                //        DiscordUser member = shard.Cache.Users.Get(pollid);
-                //        DiscordUserPresence pres = //shard.Cache.Users.Get(pollid) ??
-
-
-                //        if (pres.Status = "offline")
-                //        {
-                //            var inx = ProgHelpers.queueids.IndexOf(ProgHelpers.queueids[cnt]); //Get index because discord name can change, id can not
-                //            var idtochat = ProgHelpers.queue[inx];
-                //            ProgHelpers.queueids.RemoveAt(cnt);
-                //            ProgHelpers.queue.RemoveAt(inx);
-                //            await textChannel.CreateMessage($"<@" + idtochat + "> " + ProgHelpers.txt32);
-
-                //            cnt = 0; //start over if an offline user is found
-                //        }
-                //        else
-                //        {
-                //            cnt++; //go to next iteration
-                //        }
-                //    }
-
-                //}
-                //--------------------------------------------------------------------------------------------------------READYCHECKTIMER
-                //Start timer when queue completed and readycheck starts
-                //Push not ready people off the queuelist when timer is up, clear readychecklists and announce current queue status
 
                 //--------------------------------------------------------------------------------------------------------ADD-donev1
-                if (message.Content == "!add")
+                if (message.Content.ToLower() == "!add")
                 {
                     ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                     try
@@ -314,36 +279,44 @@ namespace K8GatherBot
                             }
                             else
                             {
-                                var aa = message.Author.Id.Id.ToString();
-                                var bb = message.Author.Username.ToString();
-                                var findx = ProgHelpers.queueids.Find(item => item == aa);
-                                if (findx == null)
+                                //Additional check, check if the picking phase is in progress...
+                                if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
                                 {
-                                    //check offline players
-                                    //await Offlinecheck();
-
-                                    //add player to queue
-                                    ProgHelpers.queueids.Add(aa);
-                                    ProgHelpers.queue.Add(bb);
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt2+" "+ ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                                    Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                                    //check if queue is full
-                                    if (ProgHelpers.queue.Count == ProgHelpers.qcount)
-                                    {
-                                        List<string> phlist = new List<string>();
-                                        foreach (string item in ProgHelpers.queueids)
-                                        {
-                                            phlist.Add("<@" + item + ">");
-                                        }
-                                        //if queue complete, announce readychecks
-                                        await textChannel.CreateMessage(ProgHelpers.txt3 + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
-                                        StartTimer();
-                                    }
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt36);
                                 }
                                 else
                                 {
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt4+" "+ ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                                    Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                                    var aa = message.Author.Id.Id.ToString();
+                                    var bb = message.Author.Username.ToString();
+                                    var findx = ProgHelpers.queueids.Find(item => item == aa);
+                                    if (findx == null)
+                                    {
+                                        //check offline players
+                                        //await Offlinecheck();
+
+                                        //add player to queue
+                                        ProgHelpers.queueids.Add(aa);
+                                        ProgHelpers.queue.Add(bb);
+                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt2 + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                        Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                        //check if queue is full
+                                        if (ProgHelpers.queue.Count == ProgHelpers.qcount)
+                                        {
+                                            List<string> phlist = new List<string>();
+                                            foreach (string item in ProgHelpers.queueids)
+                                            {
+                                                phlist.Add("<@" + item + ">");
+                                            }
+                                            //if queue complete, announce readychecks
+                                            await textChannel.CreateMessage(ProgHelpers.txt3 + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
+                                            StartTimer();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt4 + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                        Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                                    }
                                 }
 
                             }
@@ -356,7 +329,7 @@ namespace K8GatherBot
                 }
 
                 //--------------------------------------------------------------------------------------------------------REMOVE-donev1
-                if (message.Content == "!remove" || message.Content == "!rm")
+                if (message.Content.ToLower() == "!remove" || message.Content.ToLower() == "!rm")
                 {
                     ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                     try
@@ -368,29 +341,34 @@ namespace K8GatherBot
                         }
                         else
                         {
-                            //check offline players
-                            //await Offlinecheck();
-
-                            //remove player from list
-                            var aa = message.Author.Id.Id.ToString();
-                            var bb = message.Author.Username.ToString();
-
-                            if (ProgHelpers.queueids.IndexOf(aa) != -1)
+                            if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
                             {
-                                var inx = ProgHelpers.queueids.IndexOf(aa); //Get index because discord name can change, id can not
-                                ProgHelpers.queueids.Remove(aa);
-                                ProgHelpers.queue.RemoveAt(inx);
-                                //queue.Remove(message.Author.Username);
-
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt6 +" "+ ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                                Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt36);
                             }
                             else
                             {
+                                //remove player from list
+                                var aa = message.Author.Id.Id.ToString();
+                                var bb = message.Author.Username.ToString();
 
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt7);
-                                Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                                if (ProgHelpers.queueids.IndexOf(aa) != -1)
+                                {
+                                    var inx = ProgHelpers.queueids.IndexOf(aa); //Get index because discord name can change, id can not
+                                    ProgHelpers.queueids.Remove(aa);
+                                    ProgHelpers.queue.RemoveAt(inx);
+                                    //queue.Remove(message.Author.Username);
+
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt6 + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                    Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                                }
+                                else
+                                {
+
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt7);
+                                    Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                                }
                             }
+                            
 
                         }
 
@@ -401,7 +379,7 @@ namespace K8GatherBot
                     }
                 }
                 //--------------------------------------------------------------------------------------------------------READY-donev1
-                if (message.Content == "!ready" || message.Content =="!r")
+                if (message.Content.ToLower() == "!ready" || message.Content.ToLower() == "!r")
                 {
                     ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                     try
@@ -524,7 +502,7 @@ namespace K8GatherBot
 
 
                 //--------------------------------------------------------------------------------------------------------PICK
-                if (message.Content.StartsWith("!pick") || message.Content.StartsWith("!p"))
+                if (message.Content.ToLower().StartsWith("!pick") || message.Content.ToLower().StartsWith("!p"))
                 {
                     try
                     {
@@ -751,7 +729,7 @@ namespace K8GatherBot
 
                 }
                 //--------------------------------------------------------------------------------------------------------status-donev1
-                if (message.Content == "!gstatus" || message.Content == "!gs")
+                if (message.Content.ToLower() == "!gstatus" || message.Content.ToLower() == "!gs")
                 {
                     //print current queue.
                     try
@@ -820,7 +798,7 @@ namespace K8GatherBot
 
                 }
                 //--------------------------------------------------------------------------------------------------------RESETBOT-donev1
-                if (message.Content == "!resetbot")
+                if (message.Content.ToLower() == "!resetbot")
                 {
                     ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                     try
@@ -851,7 +829,7 @@ namespace K8GatherBot
                 }
 
                 //-----------------------------------------------------------------------------------------INFO - VALMIS V1
-                if (message.Content == "!gatherinfo" || message.Content == "!gi")
+                if (message.Content.ToLower() == "!gatherinfo" || message.Content.ToLower() == "!gi")
                 {
                     ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
 
