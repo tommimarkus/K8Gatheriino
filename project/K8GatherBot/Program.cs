@@ -657,7 +657,7 @@ namespace K8GatherBot
                                     //Put remaining player in picking team (pickturn has already gotten a new value above)
                                     ProgHelpers.team1.Add(remainingPlayername);
                                     ProgHelpers.team1ids.Add(remainingPlayer);
-                                    ProgHelpers.persistedData.AddFatKid(remainingPlayername);
+                                    ProgHelpers.persistedData.AddFatKid(remainingPlayer, remainingPlayername);
 
                                     //Clear draftchat names (you could say this is redundant but..)
                                     ProgHelpers.draftchatnames.Clear();
@@ -675,7 +675,7 @@ namespace K8GatherBot
                                     //Put remaining player in picking team (pickturn has already gotten a new value above)
                                     ProgHelpers.team2.Add(remainingPlayername);
                                     ProgHelpers.team2ids.Add(remainingPlayer);
-                                    ProgHelpers.persistedData.AddFatKid(remainingPlayername);
+                                    ProgHelpers.persistedData.AddFatKid(remainingPlayer, remainingPlayername);
 
                                     //Clear draftchat names (you could say this is redundant but..)
                                     ProgHelpers.draftchatnames.Clear();
@@ -695,7 +695,7 @@ namespace K8GatherBot
 
                                 if (ProgHelpers.queueids.Count == 0)
                                 {
-                                    ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1.Concat(ProgHelpers.team2));
+                                    ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1ids.Concat(ProgHelpers.team2ids).ToList(), ProgHelpers.team1.Concat(ProgHelpers.team2).ToList());
                                     await textChannel.CreateMessage(new DiscordMessageDetails()
                                      .SetEmbed(new DiscordEmbedBuilder()
                                      .SetTitle($"kitsun8's Gatheriino, "+ProgHelpers.txt22)
@@ -746,7 +746,7 @@ namespace K8GatherBot
 
                 }
 
-
+                // ---------------------------- !fatkid
                 if (message.Content.ToLower().StartsWith("!fatkid"))
                 {
                     try
@@ -763,6 +763,67 @@ namespace K8GatherBot
 						Console.WriteLine("EX-!fatkid" + " --- " + DateTime.Now);
 					}
                 }
+
+                if(message.Content.ToLower().StartsWith("!f10")) 
+                {
+                    try
+                    {
+                        ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+                        string msg = message.Content;
+                        string fatKidTop10 = ProgHelpers.persistedData.GetFatKidTop10();
+						await textChannel.CreateMessage(new DiscordMessageDetails()
+									.SetEmbed(new DiscordEmbedBuilder()
+                                              .SetTitle($"kitsun8's Gatheriino")
+                                              .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
+                                              .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+                                              .AddField(ProgHelpers.txtFatKidTop, fatKidTop10)));
+                    } catch (Exception ex) 
+                    {
+                        Console.WriteLine("EX-!f10 --- " + DateTime.Now);
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+
+				// ---------------------------- !score
+                if (message.Content.ToLower().StartsWith("!hs") || message.Content.ToLower().StartsWith("!highscore"))
+				{
+					try
+					{
+						ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+						string msg = message.Content;
+						string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
+						Console.WriteLine("fatkid name split resulted in " + userName);
+                        string hsInfo = ProgHelpers.persistedData.GetHighScoreInfo(userName, ProgHelpers.txtHighScoreSingle);
+
+						await textChannel.CreateMessage($"<@{message.Author.Id}> " + hsInfo);
+					}
+					catch
+					{
+						Console.WriteLine("EX-!hs" + " --- " + DateTime.Now);
+					}
+				}
+
+				if (message.Content.ToLower().StartsWith("!top10"))
+				{
+					try
+					{
+						ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+						string msg = message.Content;
+                        string highScoreTop10 = ProgHelpers.persistedData.GetHighScoreTop10();
+						await textChannel.CreateMessage(new DiscordMessageDetails()
+									.SetEmbed(new DiscordEmbedBuilder()
+											  .SetTitle($"kitsun8's Gatheriino")
+											  .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
+											  .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+                                              .AddField(ProgHelpers.txtHighScoresTop, highScoreTop10)));
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("EX-!top10 --- " + DateTime.Now);
+						Console.WriteLine(ex.ToString());
+					}
+				}
+
 				//--------------------------------------------------------------------------------------------------------status-donev1
 				if (message.Content.ToLower() == "!gstatus" || message.Content.ToLower() == "!gs")
                 {

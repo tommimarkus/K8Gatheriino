@@ -52,49 +52,86 @@ namespace K8GatherBot
 			}
         }
 
-        public void AddFatKid(String userName)
+        public void AddFatKid(string id, string userName)
         {
-            Add(fatKids, userName);
+            Add(fatKids, id, userName);
             PersistList(fatKids, fatkidFileName);
         }
 
-        public void AddHighScores(IEnumerable<string> userNames) {
-            foreach(string userName in userNames) {
-                Add(highScores, userName);
+        public void AddHighScores(List<string> ids, List<string> userNames) {
+            for (int i = 0; i < ids.Count; i++) {
+                Add(highScores, ids[i], userNames[i]);
             }
             PersistList(highScores, highScoreFileName);
         }
 
-        public void Add(List<DataPair> data, String userName) {
-            DataPair entry = fatKids.Find(x => x.userName.Equals(userName));
+        public void Add(List<DataPair> data, string id, string userName) {
+            DataPair entry = data.Find(x => x.id.Equals(id));
 
             if(entry == null) {
-                entry = new DataPair(userName);
-                fatKids.Add(entry);
+                entry = new DataPair(id, userName);
+                data.Add(entry);
+            } else {
+                entry.userName = userName;
             } 
             entry.Add();
         }
 
         public string GetFatKidInfo(string userName, string response)
         {
-            DataPair fatKid = fatKids.Find(x => x.userName.Equals(userName));
-            if (fatKid == null) {
-                return String.Format(response, userName, 0, fatKids.Count, fatKids.Count);
+            return GetInfo(fatKids, userName, response);
+        }
+
+        public string GetHighScoreInfo(string userName, string response) {
+            return GetInfo(highScores, userName, response);
+        }
+
+        private string GetInfo(List<DataPair> data, string userName, string response) {
+            DataPair entry = data.Find(x => x.userName.Equals(userName));
+            if (entry == null) {
+                return String.Format(response, userName, 0, data.Count, data.Count);
             }
-            return String.Format(response, fatKid.userName, fatKid.count, fatKids.IndexOf(fatKid) + 1, fatKids.Count);
+            return String.Format(response, entry.userName, entry.count, data.IndexOf(entry) + 1, data.Count);
+        }
+
+        public string GetFatKidTop10()
+        {
+            return GetTop10Info(fatKids);
+        }
+
+
+		public string GetHighScoreTop10()
+		{
+            return GetTop10Info(highScores);
+		}
+
+        private string GetTop10Info(List<DataPair> data) 
+        {
+            if(data.Count == 0) {
+                return ":(";
+            }
+            string list = "";
+            for (int i = 0; i < 10 || i == data.Count; i++) {
+                DataPair entry = data[i];
+                list += i + ". " + entry.userName + " / " + entry.count + "\n";
+            }
+            return list;
         }
     }
 
     public class DataPair : IComparable<DataPair>, IEquatable<DataPair> {
-        public string userName { get; }
+        public string id { get; }
+        public string userName { get; set; }
         public int count { get; set; }
 
-        public DataPair(string username) {
+        public DataPair(string id, string username) {
+            this.id = id;
             this.userName = username;
             this.count = 0;
         }
 
-        public DataPair(string username, int count) {
+        public DataPair(string id, string username, int count) {
+            this.id = id;
             this.userName = username;
             this.count = count;
         }
@@ -109,7 +146,7 @@ namespace K8GatherBot
 
         public bool Equals(DataPair other)
         {
-            return this.userName.Equals(other.userName);
+            return this.id.Equals(other.id);
         }
 
         internal void Add()
