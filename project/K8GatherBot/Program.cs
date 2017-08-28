@@ -746,6 +746,64 @@ namespace K8GatherBot
 
                 }
 
+    //            if (message.Content.ToLower().StartsWith("!fakeriino")) {
+    //                ProgHelpers.persistedData.AddFatKid("1", "pirate_patch");
+    //                ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+    //                ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+    //                ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+				//	ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+				//	ProgHelpers.persistedData.AddFatKid("3", "jonne");
+    //                ProgHelpers.persistedData.AddFatKid("3", "jonne");
+				//	ProgHelpers.persistedData.AddFatKid("4", "pyro");
+    //                ProgHelpers.persistedData.AddFatKid("4", "pyro");
+    //                ProgHelpers.persistedData.AddFatKid("4", "pyro");
+    //                ProgHelpers.persistedData.AddFatKid("4", "pyro-muutettu");
+    //                ProgHelpers.persistedData.AddFatKid("5", "herbert");
+    //                ProgHelpers.persistedData.AddFatKid("5", "herbert");
+
+    //                List<string> ids = new List<string>();
+    //                List<string> usernames = new List<string>();
+
+    //                ids.Add("1");
+    //                usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+				//	ids.Add("1");
+				//	usernames.Add("pirate_patch");
+    //                ids.Add("2");
+    //                usernames.Add("kitsune");
+				//	ids.Add("2");
+				//	usernames.Add("kitsune");
+				//	ids.Add("2");
+				//	usernames.Add("kitsune");
+				//	ids.Add("2");
+				//	usernames.Add("kitsune");
+				//	ids.Add("2");
+				//	usernames.Add("kitsune");
+				//	ids.Add("2");
+				//	usernames.Add("kitsune");
+				//	ids.Add("2");
+				//	usernames.Add("kitsune");
+				//	ids.Add("5");
+				//	usernames.Add("herbert");
+
+    //                ProgHelpers.persistedData.AddHighScores(ids, usernames);
+				//}
+
                 // ---------------------------- !fatkid
                 if (message.Content.ToLower().StartsWith("!fatkid"))
                 {

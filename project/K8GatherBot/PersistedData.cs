@@ -32,7 +32,7 @@ namespace K8GatherBot
             using (TextReader fileReader = File.OpenText(@fileName))
 			{
                 CsvReader csvFile = new CsvReader(fileReader);
-                csvFile.Configuration.HasHeaderRecord = true;
+                csvFile.Configuration.HasHeaderRecord = false;
 				csvFile.Read();
                 var records = csvFile.GetRecords<DataPair>();
                 foreach(DataPair pair in records) {
@@ -65,7 +65,7 @@ namespace K8GatherBot
             PersistList(highScores, highScoreFileName);
         }
 
-        public void Add(List<DataPair> data, string id, string userName) {
+        private void Add(List<DataPair> data, string id, string userName) {
             DataPair entry = data.Find(x => x.id.Equals(id));
 
             if(entry == null) {
@@ -111,18 +111,22 @@ namespace K8GatherBot
                 return ":(";
             }
             string list = "";
-            for (int i = 0; i < 10 || i == data.Count; i++) {
+            for (int i = 0; i < 10 && i != data.Count; i++) {
                 DataPair entry = data[i];
-                list += i + ". " + entry.userName + " / " + entry.count + "\n";
+                list += i+1 + ". " + entry.userName + " / " + entry.count + "\n";
             }
             return list;
         }
     }
 
     public class DataPair : IComparable<DataPair>, IEquatable<DataPair> {
-        public string id { get; }
+        public string id { get; set; }
         public string userName { get; set; }
         public int count { get; set; }
+
+        public DataPair() {
+            
+        }
 
         public DataPair(string id, string username) {
             this.id = id;
@@ -141,7 +145,7 @@ namespace K8GatherBot
             if(this.count == other.count) {
                 return string.Compare(this.userName, other.userName, StringComparison.OrdinalIgnoreCase);
             }
-            return this.count.CompareTo(other.count);
+            return other.count.CompareTo(this.count);
         }
 
         public bool Equals(DataPair other)
