@@ -15,12 +15,14 @@ namespace K8GatherBot
     
 
     public class Program
-    {
-        
+    {        
+
         public static class ProgHelpers
         {
             //things needed for obvious reasons
             public static IConfigurationRoot Configuration { get; set; }
+            public static PersistedData persistedData { get; set; }
+
             public static List<string> queue = new List<string>(); //names
             public static List<string> queueids = new List<string>(); //discord ids
             public static List<string> readycheckids = new List<string>(); //readycheck
@@ -93,6 +95,12 @@ namespace K8GatherBot
             public static string txt36 = "Wait until the picking phase is over.";
 
             public static string txt35 = "You have already readied!";
+
+            public static string txtFatKidTop = "Top 10 Fat Kids";
+            public static string txtFatKidSingle = "{0} has been the fat kid {1} times ({2}/{3})";
+
+            public static string txtHighScoresTop = "Top 10 Gathering LEGENDS";
+            public static string txtHighScoreSingle = "{0} has played {1} games ({2}/{3})";
         }
 
         public static void Main(string[] args)
@@ -104,6 +112,7 @@ namespace K8GatherBot
              .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json");
             ProgHelpers.Configuration = builder.Build();
+            ProgHelpers.persistedData = new PersistedData();
 
             Console.WriteLine("START SETTINGS-----------------------------");
             ProgHelpers.qcount = Convert.ToInt32(ProgHelpers.Configuration["Settings:Queuesize"]);
@@ -160,6 +169,11 @@ namespace K8GatherBot
                 ProgHelpers.txt34 = "Kaikki pelaajat eivät olleet valmiita readycheckin aikana. Palataan jonoon valmiina olleiden pelaajien kanssa.";
                 ProgHelpers.txt35 = "Olet jo merkinnyt itsesi valmiiksi!";
                 ProgHelpers.txt36 = "Odota poimintavaiheen päättymistä!";
+
+                ProgHelpers.txtFatKidTop = "Top10 viimeisenä valitut";
+                ProgHelpers.txtFatKidSingle = "{0} on valittu viimeisenä {1} kertaa ({2}/{3})";
+                ProgHelpers.txtHighScoresTop = "Top10 gathuLEGENDAT";
+                ProgHelpers.txtHighScoreSingle = "{0} on pelannut {1} gathua ({2}/{3})";
             }
             Program program = new Program();
             program.Run().Wait();
@@ -643,6 +657,7 @@ namespace K8GatherBot
                                     //Put remaining player in picking team (pickturn has already gotten a new value above)
                                     ProgHelpers.team1.Add(remainingPlayername);
                                     ProgHelpers.team1ids.Add(remainingPlayer);
+                                    ProgHelpers.persistedData.AddFatKid(remainingPlayername);
 
                                     //Clear draftchat names (you could say this is redundant but..)
                                     ProgHelpers.draftchatnames.Clear();
@@ -660,6 +675,7 @@ namespace K8GatherBot
                                     //Put remaining player in picking team (pickturn has already gotten a new value above)
                                     ProgHelpers.team2.Add(remainingPlayername);
                                     ProgHelpers.team2ids.Add(remainingPlayer);
+                                    ProgHelpers.persistedData.AddFatKid(remainingPlayername);
 
                                     //Clear draftchat names (you could say this is redundant but..)
                                     ProgHelpers.draftchatnames.Clear();
@@ -679,6 +695,7 @@ namespace K8GatherBot
 
                                 if (ProgHelpers.queueids.Count == 0)
                                 {
+                                    ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1.Concat(ProgHelpers.team2));
                                     await textChannel.CreateMessage(new DiscordMessageDetails()
                                      .SetEmbed(new DiscordEmbedBuilder()
                                      .SetTitle($"kitsun8's Gatheriino, "+ProgHelpers.txt22)
@@ -728,8 +745,26 @@ namespace K8GatherBot
                     //place person (index of player) in team (id and name)
 
                 }
-                //--------------------------------------------------------------------------------------------------------status-donev1
-                if (message.Content.ToLower() == "!gstatus" || message.Content.ToLower() == "!gs")
+
+
+                if (message.Content.ToLower().StartsWith("!fatkid"))
+                {
+                    try
+                    {
+                        ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+                        string msg = message.Content;
+                        string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
+                        Console.WriteLine("fatkid name split resulted in " + userName);
+                        string fatKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.txtFatKidSingle);
+
+                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + fatKidInfo);
+					} catch 
+                    {
+						Console.WriteLine("EX-!fatkid" + " --- " + DateTime.Now);
+					}
+                }
+				//--------------------------------------------------------------------------------------------------------status-donev1
+				if (message.Content.ToLower() == "!gstatus" || message.Content.ToLower() == "!gs")
                 {
                     //print current queue.
                     try
