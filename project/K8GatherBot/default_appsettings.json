@@ -1,0 +1,10 @@
+﻿{
+  "Settings": {
+    "BotToken": "",
+    "Queuesize": "12",
+    "AllowedChannel": "",
+    "Readytimer": "12",
+    "Language": "en",
+    "Version": ""
+  }
+}
