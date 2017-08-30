@@ -10,9 +10,13 @@ namespace K8GatherBot
     {
         private string fatkidFileName = "fatkid.csv";
         private string highScoreFileName = "highscores.csv";
+        private string thinkidFileName = "thinkid.csv";
+        private string captainsFileName = "captains.csv";
 
         private List<UserData> fatKids = new List<UserData>();
         private List<UserData> highScores = new List<UserData>();
+        private List<UserData> thinKids = new List<UserData>();
+        private List<UserData> captains = new List<UserData>();
 
         public PersistedData()
         {
@@ -21,7 +25,9 @@ namespace K8GatherBot
 
         private void InitData() {
             InitList(fatKids, fatkidFileName);
+            InitList(thinKids, thinkidFileName);
             InitList(highScores, highScoreFileName);
+            InitList(captains, captainsFileName);
         }
 
         private void InitList(List<UserData> data, string fileName)
@@ -52,10 +58,14 @@ namespace K8GatherBot
 			}
         }
 
-        public void AddFatKid(string id, string userName)
-        {
+        public void AddFatKid(string id, string userName) {
             Add(fatKids, id, userName);
             PersistList(fatKids, fatkidFileName);
+        }
+
+        public void AddThinKid(string id, string userName) {
+            Add(thinKids, id, userName);
+            PersistList(thinKids, thinkidFileName);
         }
 
         public void AddHighScores(List<string> ids, List<string> userNames) {
@@ -63,6 +73,12 @@ namespace K8GatherBot
                 Add(highScores, ids[i], userNames[i]);
             }
             PersistList(highScores, highScoreFileName);
+        }
+
+        public void AddCaptains(string cid, string cUserName1, string cid2, string cUserName2) {
+            Add(captains, cid, cUserName1);
+            Add(captains, cid2, cUserName2);
+            PersistList(captains, captainsFileName);
         }
 
         private void Add(List<UserData> data, string id, string userName) {
@@ -77,13 +93,20 @@ namespace K8GatherBot
             entry.Add();
         }
 
-        public string GetFatKidInfo(string userName, string response)
-        {
+        public string GetFatKidInfo(string userName, string response) {
             return GetInfo(fatKids, userName, response);
+        }
+
+        public string GetThinKidInfo(string userName, string response) {
+            return GetInfo(thinKids, userName, response);
         }
 
         public string GetHighScoreInfo(string userName, string response) {
             return GetInfo(highScores, userName, response);
+        }
+
+        public string GetCaptainInfo(string userName, string response) {
+            return GetInfo(captains, userName, response);
         }
 
         private string GetInfo(List<UserData> data, string userName, string response) {
@@ -94,19 +117,23 @@ namespace K8GatherBot
             return String.Format(response, entry.userName, entry.count, data.IndexOf(entry) + 1, data.Count);
         }
 
-        public string GetFatKidTop10()
-        {
+        public string GetFatKidTop10() {
             return GetTop10Info(fatKids);
         }
 
+        public string GetThinKidTop10() {
+            return GetTop10Info(thinKids);
+        }
 
-		public string GetHighScoreTop10()
-		{
+		public string GetHighScoreTop10() {
             return GetTop10Info(highScores);
 		}
 
-        private string GetTop10Info(List<UserData> data) 
-        {
+        public string GetCaptainTop10() {
+            return GetTop10Info(captains);
+        }
+
+        private string GetTop10Info(List<UserData> data) {
             if(data.Count == 0) {
                 return ":(";
             }
@@ -140,21 +167,18 @@ namespace K8GatherBot
             this.count = count;
         }
 
-        public int CompareTo(UserData other)
-        {
+        public int CompareTo(UserData other) {
             if(this.count == other.count) {
                 return string.Compare(this.userName, other.userName, StringComparison.OrdinalIgnoreCase);
             }
             return other.count.CompareTo(this.count);
         }
 
-        public bool Equals(UserData other)
-        {
+        public bool Equals(UserData other) {
             return this.id.Equals(other.id);
         }
 
-        internal void Add()
-        {
+        internal void Add() {
             count++;
         }
     }

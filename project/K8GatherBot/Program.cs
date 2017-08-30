@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
 namespace K8GatherBot
 {
 
@@ -141,7 +143,10 @@ namespace K8GatherBot
 			fi.Add("fatKid.singleStatus", "{0} on valittu viimeisenä {1} kertaa ({2}/{3})");
 			fi.Add("highScores.top10", "Top10 gathuLEGENDAT");
 			fi.Add("highScores.statusSingle", "{0} on pelannut {1} gathua ({2}/{3})");
-
+            fi.Add("thinKid.top10", "Top10 ensimmäisenä valitut");
+            fi.Add("thinKid.statusSingle", "{0} on valittu ensimmäisenä {1} kertaa ({2}/{3}");
+			fi.Add("captain.top10", "Top10 kapteenit");
+			fi.Add("captain.statusSingle", "{0} on valittu kapteeniksi {1} kertaa ({2}/{3}");
 
 			en.Add("txt", "Please wait until the previous queue is handled.");
 			en.Add("queuePhase.added", "Added!");
@@ -184,6 +189,10 @@ namespace K8GatherBot
 			en.Add("fatKid.singleStatus", "{0} has been the fat kid {1} times ({2}/{3})");
 			en.Add("highScores.top10", "Top 10 Gathering LEGENDS");
 			en.Add("highScores.statusSingle", "{0} has played {1} games ({2}/{3})");
+			en.Add("thinKid.top10", "Top10 Thin Kids");
+			en.Add("thinKid.statusSingle", "{0} has been the thin kid {1} times ({2}/{3}");
+			en.Add("captain.top10", "Top10 Captains");
+			en.Add("captain.statusSingle", "{0} has been selected captain {1} times ({2}/{3}");
 		}
 
 		public async Task Run()
@@ -306,9 +315,9 @@ namespace K8GatherBot
                 case "!p":
                     await CmdPick(shard, message);
                     break;
-                //case "!fakeriino": 
-                    //cmdFakeriino(message);
-                    //break;
+                case "!fakeriino": 
+                    cmdFakeriino(message);
+                    break;
                 case "!fatkid":
                     await CmdFatKid(shard, message);
                     break;
@@ -321,7 +330,19 @@ namespace K8GatherBot
                     break;
                 case "!topten":
                     await CmdTopTen(shard, message);
-                    break;                                          
+                    break;  
+                case "!thinkid":
+                    await CmdThinKid(shard, message);
+                    break;
+                case "!tk10":
+                    await CmdThinTopTen(shard, message);
+                    break;
+                case "!captain":
+                    await CmdCaptain(shard, message);
+                    break;
+                case "!c10":
+                    await CmdCaptainTopTen(shard, message);
+                    break;
                 case "!gstatus":
                 case "!gs":
                     await CmdGStatus(shard, message);
@@ -343,15 +364,15 @@ namespace K8GatherBot
             try
             {
                 // Reply to the user who posted "!info".
-                await textChannel.CreateMessage(new DiscordMessageDetails()
-                 .SetEmbed(new DiscordEmbedBuilder()
-                 .SetTitle($"kitsun8's GatherBot")
-                 .SetFooter("Discore (.NET Core), C# , " + ProgHelpers.txtversion)
-                 .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                 .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8#4567", false)
-                 .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["status.queueStatus"], false)
-                 .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
-                 .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore", false)
+                textChannel.CreateMessage(new DiscordMessageDetails()
+                    .SetEmbed(new DiscordEmbedBuilder()
+                    .SetTitle($"kitsun8's GatherBot")
+                    .SetFooter("Discore (.NET Core), C# , " + ProgHelpers.txtversion)
+                    .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+                    .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8#4567", false)
+                    .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["status.queueStatus"], false)
+                    .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
+                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore", false)
                 ));
 
                 Console.WriteLine($"!gatherinfo - " + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
@@ -383,7 +404,7 @@ namespace K8GatherBot
                 ProgHelpers.readycheckids.Clear();
                 ProgHelpers.readycheck.Clear();
 
-                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
                 Console.WriteLine("!resetbot" + " --- " + DateTime.Now);
             }
             catch (Exception)
@@ -407,7 +428,7 @@ namespace K8GatherBot
                         List<string> notinlist = ProgHelpers.queue.Except(ProgHelpers.readycheck).ToList();
 
                         //full queue, ready phase
-                        await textChannel.CreateMessage(new DiscordMessageDetails()
+                        textChannel.CreateMessage(new DiscordMessageDetails()
                         .SetEmbed(new DiscordEmbedBuilder()
                         .SetTitle($"kitsun8's GatherBot, readycheck  " + "(" + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + ")")
                         .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
@@ -421,7 +442,7 @@ namespace K8GatherBot
                         if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
                         {
                             //picking phase
-                            await textChannel.CreateMessage(new DiscordMessageDetails()
+                            textChannel.CreateMessage(new DiscordMessageDetails()
                             .SetEmbed(new DiscordEmbedBuilder()
                             .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.locale["status.pickedTeams"])
                             .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
@@ -433,7 +454,7 @@ namespace K8GatherBot
                         else
                         {
                             //queue phase
-                            await textChannel.CreateMessage(new DiscordMessageDetails()
+                            textChannel.CreateMessage(new DiscordMessageDetails()
                             .SetEmbed(new DiscordEmbedBuilder()
                             .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.locale["status.queueStatus"] + " " + "(" + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + ")")
                             .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
@@ -448,7 +469,7 @@ namespace K8GatherBot
                 }
                 else
                 {
-                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
+                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
                     Console.WriteLine("!status" + " --- " + DateTime.Now);
                 }
 
@@ -459,6 +480,15 @@ namespace K8GatherBot
             }
         }
 
+        private async Task sendTop10Message(ITextChannel textChannel, string textKey, string top10List) {
+			textChannel.CreateMessage(new DiscordMessageDetails()
+							.SetEmbed(new DiscordEmbedBuilder()
+									  .SetTitle($"kitsun8's Gatheriino")
+									  .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
+									  .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+									  .AddField(ProgHelpers.locale[textKey], top10List)));
+        }
+
         private async Task CmdTopTen(Shard shard, DiscordMessage message)
         {
             try
@@ -466,35 +496,12 @@ namespace K8GatherBot
                 ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                 string msg = message.Content;
                 string highScoreTop10 = ProgHelpers.persistedData.GetHighScoreTop10();
-                await textChannel.CreateMessage(new DiscordMessageDetails()
-                            .SetEmbed(new DiscordEmbedBuilder()
-                                      .SetTitle($"kitsun8's Gatheriino")
-                                      .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
-                                      .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                                      .AddField(ProgHelpers.locale["highScores.top10"], highScoreTop10)));
+                await sendTop10Message(textChannel, "highScores.top10", highScoreTop10);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("EX-!top10 --- " + DateTime.Now);
                 Console.WriteLine(ex.ToString());
-            }
-        }
-
-        private async Task CmdHighScore(Shard shard, DiscordMessage message)
-        {
-            try
-            {
-                ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
-                string msg = message.Content;
-                string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
-                Console.WriteLine("fatkid name split resulted in " + userName);
-                string hsInfo = ProgHelpers.persistedData.GetHighScoreInfo(userName, ProgHelpers.locale["highScores.statusSingle"]);
-
-                await textChannel.CreateMessage($"<@{message.Author.Id}> " + hsInfo);
-            }
-            catch
-            {
-                Console.WriteLine("EX-!hs" + " --- " + DateTime.Now);
             }
         }
 
@@ -505,12 +512,7 @@ namespace K8GatherBot
                 ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
                 string msg = message.Content;
                 string fatKidTop10 = ProgHelpers.persistedData.GetFatKidTop10();
-                await textChannel.CreateMessage(new DiscordMessageDetails()
-                            .SetEmbed(new DiscordEmbedBuilder()
-                                      .SetTitle($"kitsun8's Gatheriino")
-                                      .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
-                                      .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                                      .AddField(ProgHelpers.locale["fatKid.top10"], fatKidTop10)));
+                await sendTop10Message(textChannel, "fatKid.top10", fatKidTop10);
             }
             catch (Exception ex)
             {
@@ -519,67 +521,55 @@ namespace K8GatherBot
             }
         }
 
-        //private static void cmdFakeriino(DiscordMessage message)
-        //{
-        //    if (message.Content.ToLower().StartsWith("!fakeriino"))
-        //    {
-        //        ProgHelpers.persistedData.AddFatKid("1", "pirate_patch");
-        //        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-        //        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-        //        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-        //        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-        //        ProgHelpers.persistedData.AddFatKid("3", "jonne");
-        //        ProgHelpers.persistedData.AddFatKid("3", "jonne");
-        //        ProgHelpers.persistedData.AddFatKid("4", "pyro");
-        //        ProgHelpers.persistedData.AddFatKid("4", "pyro");
-        //        ProgHelpers.persistedData.AddFatKid("4", "pyro");
-        //        ProgHelpers.persistedData.AddFatKid("4", "pyro-muutettu");
-        //        ProgHelpers.persistedData.AddFatKid("5", "herbert");
-        //        ProgHelpers.persistedData.AddFatKid("5", "herbert");
+		private async Task CmdCaptainTopTen(Shard shard, DiscordMessage message)
+		{
+			try
+			{
+				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+				string msg = message.Content;
+                string captainTop10 = ProgHelpers.persistedData.GetCaptainTop10();
+				await sendTop10Message(textChannel, "captain.top10", captainTop10);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("EX-!c10 --- " + DateTime.Now);
+				Console.WriteLine(ex.ToString());
+			}
+		}
 
-        //        List<string> ids = new List<string>();
-        //        List<string> usernames = new List<string>();
+		private async Task CmdCaptain(Shard shard, DiscordMessage message)
+		{
+			try
+			{
+				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+				string msg = message.Content;
+				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
+				Console.WriteLine("fatkid name split resulted in " + userName);
+                string captainInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["captain.singleStatus"]);
+				textChannel.CreateMessage($"<@{message.Author.Id}> " + captainInfo);
+			}
+			catch
+			{
+				Console.WriteLine("EX-!captain" + " --- " + DateTime.Now);
+			}
+		}
 
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("1");
-        //        usernames.Add("pirate_patch");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("2");
-        //        usernames.Add("kitsune");
-        //        ids.Add("5");
-        //        usernames.Add("herbert");
-
-        //        ProgHelpers.persistedData.AddHighScores(ids, usernames);
-        //    }
-        //}
+		private async Task CmdHighScore(Shard shard, DiscordMessage message)
+		{
+			try
+			{
+				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+				string msg = message.Content;
+				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
+				Console.WriteLine("fatkid name split resulted in " + userName);
+				string hsInfo = ProgHelpers.persistedData.GetHighScoreInfo(userName, ProgHelpers.locale["highScores.statusSingle"]);
+				textChannel.CreateMessage($"<@{message.Author.Id}> " + hsInfo);
+			}
+			catch
+			{
+				Console.WriteLine("EX-!hs" + " --- " + DateTime.Now);
+			}
+		}
 
         private async Task CmdFatKid(Shard shard, DiscordMessage message) 
         {
@@ -590,8 +580,7 @@ namespace K8GatherBot
 				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
 				Console.WriteLine("fatkid name split resulted in " + userName);
 				string fatKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["fatKid.singleStatus"]);
-
-				await textChannel.CreateMessage($"<@{message.Author.Id}> " + fatKidInfo);
+				textChannel.CreateMessage($"<@{message.Author.Id}> " + fatKidInfo);
 			}
 			catch
 			{
@@ -599,7 +588,115 @@ namespace K8GatherBot
 			}
         }
 
-        private async Task CmdPick(Shard shard, DiscordMessage message)
+		private async Task CmdThinTopTen(Shard shard, DiscordMessage message)
+		{
+			try
+			{
+				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+				string msg = message.Content;
+                string thinKidTop10 = ProgHelpers.persistedData.GetThinKidTop10();
+				textChannel.CreateMessage(new DiscordMessageDetails()
+							.SetEmbed(new DiscordEmbedBuilder()
+									  .SetTitle($"kitsun8's Gatheriino")
+									  .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
+									  .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+									  .AddField(ProgHelpers.locale["thinKid.top10"], thinKidTop10)));
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("EX-!tk10 --- " + DateTime.Now);
+				Console.WriteLine(ex.ToString());
+			}
+		}
+
+		private async Task CmdThinKid(Shard shard, DiscordMessage message)
+		{
+			try
+			{
+				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+				string msg = message.Content;
+				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
+				Console.WriteLine("fatkid name split resulted in " + userName);
+				string thinKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["thinKid.singleStatus"]);
+
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + thinKidInfo);
+			}
+			catch
+			{
+				Console.WriteLine("EX-!thinkid" + " --- " + DateTime.Now);
+			}
+		}
+
+		private static void cmdFakeriino(DiscordMessage message)
+		{
+            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "2", "kitsun8");
+            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
+            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
+            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "4", "hermanni");
+
+            ProgHelpers.persistedData.AddThinKid("1", "pirate_patch");
+
+		//    if (message.Content.ToLower().StartsWith("!fakeriino"))
+		//    {
+		//        ProgHelpers.persistedData.AddFatKid("1", "pirate_patch");
+		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
+		//        ProgHelpers.persistedData.AddFatKid("3", "jonne");
+		//        ProgHelpers.persistedData.AddFatKid("3", "jonne");
+		//        ProgHelpers.persistedData.AddFatKid("4", "pyro");
+		//        ProgHelpers.persistedData.AddFatKid("4", "pyro");
+		//        ProgHelpers.persistedData.AddFatKid("4", "pyro");
+		//        ProgHelpers.persistedData.AddFatKid("4", "pyro-muutettu");
+		//        ProgHelpers.persistedData.AddFatKid("5", "herbert");
+		//        ProgHelpers.persistedData.AddFatKid("5", "herbert");
+
+		//        List<string> ids = new List<string>();
+		//        List<string> usernames = new List<string>();
+
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("1");
+		//        usernames.Add("pirate_patch");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("2");
+		//        usernames.Add("kitsune");
+		//        ids.Add("5");
+		//        usernames.Add("herbert");
+
+		//        ProgHelpers.persistedData.AddHighScores(ids, usernames);
+		//    }
+		}
+
+		private async Task CmdPick(Shard shard, DiscordMessage message)
         {
             try
             {
@@ -627,41 +724,40 @@ namespace K8GatherBot
                             sels2name = ProgHelpers.queue.ElementAtOrDefault(sel);
 
                             //check if exists in current teams
-                            if (ProgHelpers.team1ids.IndexOf(sels2) == -1)
+                            if (ProgHelpers.team1ids.IndexOf(sels2) == -1 && ProgHelpers.team2ids.IndexOf(sels2) == -1)
                             {
-                                if (ProgHelpers.team2ids.IndexOf(sels2) == -1)
+                                //checks complete, adding player to team
+                                ProgHelpers.team1.Add(sels2name);
+                                ProgHelpers.team1ids.Add(sels2);
+                                ProgHelpers.pickturn = ProgHelpers.captain2id;
+
+                                //find and remove player from playerlist shown to users
+                                int finderremover = ProgHelpers.draftchatids.IndexOf(sels2);
+                                ProgHelpers.draftchatnames.RemoveAt(finderremover);
+                                ProgHelpers.draftchatids.RemoveAt(finderremover);
+
+                                Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
+
+                                // add the first picked ie. the thin kid 
+                                if (ProgHelpers.team1ids.Count == 1) 
                                 {
-                                    //checks complete, adding player to team
-                                    ProgHelpers.team1.Add(sels2name);
-                                    ProgHelpers.team1ids.Add(sels2);
-                                    ProgHelpers.pickturn = ProgHelpers.captain2id;
-
-                                    //find and remove player from playerlist shown to users
-                                    int finderremover = ProgHelpers.draftchatids.IndexOf(sels2);
-                                    ProgHelpers.draftchatnames.RemoveAt(finderremover);
-                                    ProgHelpers.draftchatids.RemoveAt(finderremover);
-
-                                    Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
-
-                                    //post the remaining players, take into account that last player in the queue is being automatically added
-                                    if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
-                                    {
-                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team2Turn"] + " <@" + ProgHelpers.captain2id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
-                                    }
+                                    ProgHelpers.persistedData.AddThinKid(sels2, sels2name);    
                                 }
-                                else
+
+                                //post the remaining players, take into account that last player in the queue is being automatically added
+                                if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                 {
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
+                                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team2Turn"] + " <@" + ProgHelpers.captain2id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                 }
                             }
                             else
                             {
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
+                                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
                             }
                         }
                         else
                         {
-                            await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
+                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
                         }
                         //if exists, place index in other list. 
 
@@ -703,22 +799,22 @@ namespace K8GatherBot
                                     //post the remaining players, take into account that last player in the queue is being automatically added
                                     if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                     {
-                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team1Turn"] + "<@" + ProgHelpers.captain1id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
+                                        textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team1Turn"] + "<@" + ProgHelpers.captain1id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                     }
                                 }
                                 else
                                 {
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
+                                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
                                 }
                             }
                             else
                             {
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
+                                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
                             }
                         }
                         else
                         {
-                            await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
+                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
                         }
                         //if exists, place index in other list. 
 
@@ -779,7 +875,7 @@ namespace K8GatherBot
                         if (ProgHelpers.queueids.Count == 0)
                         {
                             ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1ids.Concat(ProgHelpers.team2ids).ToList(), ProgHelpers.team1.Concat(ProgHelpers.team2).ToList());
-                            await textChannel.CreateMessage(new DiscordMessageDetails()
+                            textChannel.CreateMessage(new DiscordMessageDetails()
                              .SetEmbed(new DiscordEmbedBuilder()
                              .SetTitle($"kitsun8's Gatheriino, " + ProgHelpers.locale["admin.resetSuccessful"])
                              .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
@@ -812,11 +908,11 @@ namespace K8GatherBot
                 {
                     if (message.Author.Id.Id.ToString() == ProgHelpers.captain2id || message.Author.Id.Id.ToString() == ProgHelpers.captain1id)
                     {
-                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notYourTurn"]);
+                        textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notYourTurn"]);
                     }
                     else
                     {
-                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notCaptain"]);
+                        textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notCaptain"]);
                     }
                 }
                 Console.WriteLine("!pick" + " --- " + DateTime.Now);
@@ -841,7 +937,7 @@ namespace K8GatherBot
 					//check if person has added himself in the queue
 					if (ProgHelpers.queue.Count != ProgHelpers.qcount)
 					{
-						await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+						textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 					}
 					else
 					{
@@ -850,7 +946,7 @@ namespace K8GatherBot
 						if (checkExists != null)
 						{
 							//Person has already readied
-							await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.timeout"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.timeout"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 						}
 						else
 						{
@@ -859,7 +955,7 @@ namespace K8GatherBot
 							//place person in readycheck queue
 							ProgHelpers.readycheckids.Add(aa);
 							ProgHelpers.readycheck.Add(bb);
-							await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 							//if readycheck completes the queue, start captainpick phase, clear readycheck queue in process
 							if (ProgHelpers.readycheckids.Count == ProgHelpers.qcount)
 							{
@@ -901,6 +997,8 @@ namespace K8GatherBot
 								ProgHelpers.team2.Add(c2n);
 								ProgHelpers.team2ids.Add(c2i);
 
+                                ProgHelpers.persistedData.AddCaptains(c1i, c1n, c2i, c2n);
+
 								//Workaround to keep the initial numbering active for whole draft
 								ProgHelpers.draftchatids.AddRange(ProgHelpers.queueids);
 								List<string> draftlist = new List<string>();
@@ -926,10 +1024,9 @@ namespace K8GatherBot
 									count++;
 								}
 
-								await textChannel.CreateMessage(ProgHelpers.locale["pickPhase.started"] + " " + "<@" + c1i + ">" + "\n" + ProgHelpers.locale["pickPhase.team2Captain"] + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.locale["pickPhase.instructions"] + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
-
-
-
+								textChannel.CreateMessage(ProgHelpers.locale["pickPhase.started"] + " " + "<@" + c1i + ">" + "\n" 
+                                                          + ProgHelpers.locale["pickPhase.team2Captain"] + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.locale["pickPhase.instructions"] 
+                                                          + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
 							}
 						}
 
@@ -937,7 +1034,7 @@ namespace K8GatherBot
 				}
 				else
 				{
-					await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.instructions"]);
+					textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.instructions"]);
 				}
 				Console.WriteLine("!ready" + " --- " + DateTime.Now);
 			}
@@ -955,13 +1052,13 @@ namespace K8GatherBot
 				if (ProgHelpers.queue.Count == ProgHelpers.qcount)
 				{
 					//too late to bail out
-					await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.cannotRemove"]);
+					textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.cannotRemove"]);
 				}
 				else
 				{
 					if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
 					{
-						await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.cannotAdd"]);
+						textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.cannotAdd"]);
 					}
 					else
 					{
@@ -976,13 +1073,13 @@ namespace K8GatherBot
 							ProgHelpers.queue.RemoveAt(inx);
 							//queue.Remove(message.Author.Username);
 
-							await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.removed"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.removed"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 							Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
 						}
 						else
 						{
 
-							await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notInQueue"]);
+							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notInQueue"]);
 							Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
 						}
 					}
@@ -1008,14 +1105,14 @@ namespace K8GatherBot
 					if (ProgHelpers.queue.Count == ProgHelpers.qcount)
 					{
 						//readycheck in process, cant add anymore
-						await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
+						textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
 					}
 					else
 					{
 						//Additional check, check if the picking phase is in progress...
 						if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
 						{
-							await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.alreadyMarkedReady"]);
+							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.alreadyMarkedReady"]);
 						}
 						else
 						{
@@ -1030,7 +1127,7 @@ namespace K8GatherBot
 								//add player to queue
 								ProgHelpers.queueids.Add(aa);
 								ProgHelpers.queue.Add(bb);
-								await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+								textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 								Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 								//check if queue is full
 								if (ProgHelpers.queue.Count == ProgHelpers.qcount)
@@ -1041,13 +1138,13 @@ namespace K8GatherBot
 										phlist.Add("<@" + item + ">");
 									}
 									//if queue complete, announce readychecks
-									await textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
+									textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
 									StartTimer();
 								}
 							}
 							else
 							{
-								await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+								textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
 								Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
 							}
 						}
