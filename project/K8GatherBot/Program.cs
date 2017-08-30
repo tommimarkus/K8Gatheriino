@@ -372,7 +372,7 @@ namespace K8GatherBot
                     .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8#4567", false)
                     .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["status.queueStatus"], false)
                     .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
-                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore", false)
+                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore, !tk10, !thinkid, !c10, !captain", false)
                 ));
 
                 Console.WriteLine($"!gatherinfo - " + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
