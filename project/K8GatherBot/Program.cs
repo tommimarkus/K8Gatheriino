@@ -55,56 +55,13 @@ namespace K8GatherBot
             public static string txtversion = "";
             public static string language = ""; //en-fi
 
-            //--------------------------------------LANGUAGETXTs
-            public static string txt1 = "Please wait until the previous queue is handled.";
-            public static string txt2 = "Added!";
-            public static string txt3 = "Queue is now full, proceed to mark yourself ready with ***!ready*** \n You have 60 seconds!";
-            public static string txt4 = "You're already in the queue!";
-            public static string txt5 = "Too late to back down now! Wait until the queue is handled.";
-            public static string txt6 = "Removed!";
-            public static string txt7 = "You are not in the queue right now.";
-            public static string txt8 = "Queue is not finished yet!";
-            public static string txt9 = "Ready!";
-            public static string txt10 = "Readycheck complete, starting picking phase! First picking turn: Team 1 \n Team 1 Captain:";
-            public static string txt11 = "Team 2 Captain:";
-            public static string txt12 = "Pick players using ***!pick NUMBER***";
-            public static string txt13 = "It seems you're not in the queue.";
-            public static string txt14 = "Player added to Team 1!\n Team 2 Turn to pick!";
-            public static string txt14x = "Player added to Team 2! \n Team 1 Turn to pick!";
-            public static string txt15 = "***Remaining players:***";
-            public static string txt16 = "That player is already in a team!";
-            public static string txt17 = "Couldn't place a player with that index";
-            public static string txt18 = "Not your turn to pick right now!";
-            public static string txt19 = "You are not the captain of either teams. Picking is restricted to captains.";
-            public static string txt20 = "Nobody in the queue! use ***!add***  to start queue!";
-            public static string txt21 = "All lists emptied successfully.";
-            public static string txt22 = "Selected teams";
-            public static string txt23 = "current queue";
-            public static string txt24 = "Get people to gather and play together";
-            public static string txt25 = "Only a droplet of coffee was used to develop this bot. :thinking:";
-            public static string txt26 = "Developer";
-            public static string txt27 = "Purpose";
-            public static string txt28 = "Fun fact";
-            public static string txt29 = "Commands";
-            public static string txt30 = "Players";
-            public static string txt31 = "NOT READY YET:";
-            //todo: timer and offlinechecker
-            public static string txt32 = "Removed because status is ***Offline***";
-            public static string txt33 = "Starting Readycheck timer, you have 60 seconds to ***!ready*** yourself.";
-            public static string txt34 = "Not all players were ready during the readycheck. Returning to queue with players that were ready.";
-            public static string txt36 = "Wait until the picking phase is over.";
+            public static Dictionary<string, Dictionary<string, string>> locales = new Dictionary<string, Dictionary<string, string>>();
 
-            public static string txt35 = "You have already readied!";
-
-            public static string txtFatKidTop = "Top 10 Fat Kids";
-            public static string txtFatKidSingle = "{0} has been the fat kid {1} times ({2}/{3})";
-
-            public static string txtHighScoresTop = "Top 10 Gathering LEGENDS";
-            public static string txtHighScoreSingle = "{0} has played {1} games ({2}/{3})";
+            public static Dictionary<string, string> locale;
         }
 
         public static void Main(string[] args)
-        {
+        {            
             //Get settings and GO
             Console.WriteLine("Reading settings from appsettings.json");
 
@@ -129,54 +86,104 @@ namespace K8GatherBot
             Console.WriteLine("txtversion:" + ProgHelpers.Configuration["Settings:Version"]);
             Console.WriteLine("END SETTINGS-----------------------------");
 
+            initLocalizations();
+            ProgHelpers.locale = ProgHelpers.locales[ProgHelpers.language];
 
-            if (ProgHelpers.language == "fi")
-            {
-                ProgHelpers.txt1 = "Odota kunnes edellinen jono on käsitelty.";
-                ProgHelpers.txt2 = "Lisätty!";
-                ProgHelpers.txt3 = "Jono on nyt täynnä, merkitse itsesi valmiiksi käyttäen ***!ready*** komentoa. \n Aikaa 60 sekuntia!";
-                ProgHelpers.txt4 = "Olet jo jonossa!";
-                ProgHelpers.txt5 = "Liian myöhäistä peruuttaa enää, odota jonon käsittelyn valmistumista.";
-                ProgHelpers.txt6 = "Poistettu!";
-                ProgHelpers.txt7 = "Et ole juuri nyt jonossa";
-                ProgHelpers.txt8 = "Jono ei ole vielä valmis!";
-                ProgHelpers.txt9 = "Valmiina!";
-                ProgHelpers.txt10 = "Readycheck valmis, aloitetaan poimintavaihe! Ensimmäinen poiminta: Team 1 \n Team1:n kapteeni:";
-                ProgHelpers.txt11 = "Team 2:n kapteeni:";
-                ProgHelpers.txt12 = "Poimi pelaajia käyttäen ***!pick NUMERO***";
-                ProgHelpers.txt13 = "Näyttäisi siltä ettet ole jonossa.";
-                ProgHelpers.txt14 = "Pelaaja lisätty Team 1:n! \n Team 2:n vuoro poimia!";
-                ProgHelpers.txt14x = "Pelaaja lisätty Team 2:n \n Team 1:n vuoro poimia!";
-                ProgHelpers.txt15 = "***Poimimatta:***";
-                ProgHelpers.txt16 = "Pelaaja on jo joukkueessa!";
-                ProgHelpers.txt17 = "Numerolla ei löytynyt pelaajaa!";
-                ProgHelpers.txt18 = "Ei ole vuorosi poimia!";
-                ProgHelpers.txt19 = "Vain kapteenit voivat poimia pelaajia!";
-                ProgHelpers.txt20 = "Jono on tyhjä! Käytä ***!add*** aloittaaksesi jonon!";
-                ProgHelpers.txt21 = "Kaikki listat tyhjennetty onnistuneesti!";
-                ProgHelpers.txt22 = "Valitut joukkueet";
-                ProgHelpers.txt23 = "jonon tilanne";
-                ProgHelpers.txt24 = "Saada pelaajia keräytymään pelien äärelle!";
-                ProgHelpers.txt25 = "Vain tilkka kahvia käytettiin kehitykseen. :thinking:";
-                ProgHelpers.txt26 = "Kehittäjä";
-                ProgHelpers.txt27 = "Tarkoitus";
-                ProgHelpers.txt28 = "Tiesitkö";
-                ProgHelpers.txt29 = "Komennot";
-                ProgHelpers.txt30 = "Pelaajat";
-                ProgHelpers.txt31 = "EI VALMIINA";
-                ProgHelpers.txt32 = "Poistettu koska käyttäjä on ***OFFLINE***.";
-                ProgHelpers.txt33 = "Aloitetaan readycheck. Teillä on 60 sekuntia aikaa käyttää ***!ready*** komentoa.";
-                ProgHelpers.txt34 = "Kaikki pelaajat eivät olleet valmiita readycheckin aikana. Palataan jonoon valmiina olleiden pelaajien kanssa.";
-                ProgHelpers.txt35 = "Olet jo merkinnyt itsesi valmiiksi!";
-                ProgHelpers.txt36 = "Odota poimintavaiheen päättymistä!";
-
-                ProgHelpers.txtFatKidTop = "Top10 viimeisenä valitut";
-                ProgHelpers.txtFatKidSingle = "{0} on valittu viimeisenä {1} kertaa ({2}/{3})";
-                ProgHelpers.txtHighScoresTop = "Top10 gathuLEGENDAT";
-                ProgHelpers.txtHighScoreSingle = "{0} on pelannut {1} gathua ({2}/{3})";
-            }
             Program program = new Program();
             program.Run().Wait();
+        }
+
+        public static void initLocalizations()
+        {
+            Dictionary<string, string> fi = new Dictionary<string, string>();
+            Dictionary<string, string> en = new Dictionary<string, string>();
+            ProgHelpers.locales.Add("fi", fi);
+            ProgHelpers.locales.Add("en", en);
+
+            fi.Add("pickPhase.alreadyInProcess", "Odota kunnes edellinen jono on käsitelty.");
+            fi.Add("queuePhase.added", "Lisätty!");
+            fi.Add("readyPhase.started", "Jono on nyt täynnä, merkitse itsesi valmiiksi käyttäen ***!ready*** komentoa. \n Aikaa 60 sekuntia!");
+            fi.Add("queuePhase.alreadyInQueue", "Olet jo jonossa!");
+            fi.Add("pickPhase.cannotRemove", "Liian myöhäistä peruuttaa enää, odota jonon käsittelyn valmistumista.");
+            fi.Add("queuePhase.removed", "Poistettu!");
+            fi.Add("queuePhase.notInQueue", "Et ole juuri nyt jonossa");
+            fi.Add("queuePhase.notReadyYet", "Jono ei ole vielä valmis!");
+            fi.Add("readyPhase.ready", "Valmiina!");
+            fi.Add("pickPhase.started",  "Readycheck valmis, aloitetaan poimintavaihe! Ensimmäinen poiminta: Team 1 \n Team1:n kapteeni:");
+            fi.Add("pickPhase.team2Captain",  "Team 2:n kapteeni:");
+            fi.Add("pickPhase.instructions",  "Poimi pelaajia käyttäen ***!pick NUMERO***");
+            //fi.Add("txt13",  "Näyttäisi siltä ettet ole jonossa.");
+            fi.Add("pickPhase.team2Turn",  "Pelaaja lisätty Team 1:n! \n Team 2:n vuoro poimia!");
+            fi.Add("pickPhase.team1Turn",  "Pelaaja lisätty Team 2:n! \n Team 1:n vuoro poimia!");
+            fi.Add("pickPhase.unpicked",  "***Poimimatta:***");
+            fi.Add("pickPhase.alreadyPicked",  "Pelaaja on jo joukkueessa!");
+            fi.Add("pickPhase.unknownIndex",  "Numerolla ei löytynyt pelaajaa!");
+            fi.Add("pickPhase.notYourTurn",  "Ei ole vuorosi poimia!");
+            fi.Add("pickPhase.notCaptain",  "Vain kapteenit voivat poimia pelaajia!");
+            fi.Add("queuePhase.emptyQueue",  "Jono on tyhjä! Käytä ***!add*** aloittaaksesi jonon!");
+            fi.Add("admin.resetSuccessful",  "Kaikki listat tyhjennetty onnistuneesti!");
+            fi.Add("status.pickedTeams",  "Valitut joukkueet");
+            fi.Add("status.queueStatus",  "jonon tilanne");
+            fi.Add("info.purposeAnswer",  "Saada pelaajia keräytymään pelien äärelle!");
+            fi.Add("info.funFactAnswer",  "Vain tilkka kahvia käytettiin kehitykseen. :thinking:");
+            fi.Add("info.developer",  "Kehittäjä");
+            fi.Add("info.purpose",  "Tarkoitus");
+            fi.Add("info.funFact",  "Tiesitkö");
+            fi.Add("info.commands",  "Komennot");
+            fi.Add("status.queuePlayers",  "Pelaajat");
+            fi.Add("status.notReady",  "EI VALMIINA");
+            //fi.Add("txt32",  "Poistettu koska käyttäjä on ***OFFLINE***.");
+            //fi.Add("txt33",  "Aloitetaan readycheck. Teillä on 60 sekuntia aikaa käyttää ***!ready*** komentoa.");
+            fi.Add("readyPhase.timeout",  "Kaikki pelaajat eivät olleet valmiita readycheckin aikana. Palataan jonoon valmiina olleiden pelaajien kanssa.");
+            fi.Add("readyPhase.alreadyMarkedReady",  "Olet jo merkinnyt itsesi valmiiksi!");
+            fi.Add("readyPhase.cannotAdd",  "Odota poimintavaiheen päättymistä!");
+            fi.Add("fatKid.top10", "Top10 viimeisenä valitut");
+            fi.Add("fatKid.singleStatus", "{0} on valittu viimeisenä {1} kertaa ({2}/{3})");
+            fi.Add("highScores.top10", "Top10 gathuLEGENDAT");
+            fi.Add("highScores.statusSingle", "{0} on pelannut {1} gathua ({2}/{3})");
+
+
+	        en.Add("txt",  "Please wait until the previous queue is handled.");
+	        en.Add("queuePhase.added", "Added!");
+	        en.Add("readyPhase.started", "Queue is now full, proceed to mark yourself ready with ***!ready*** \n You have 60 seconds!");
+	        en.Add("queuePhase.alreadyInQueue", "You're already in the queue!");
+	        en.Add("pickPhase.cannotRemove", "Too late to back down now! Wait until the queue is handled.");
+	        en.Add("queuePhase.removed", "Removed!");
+	        en.Add("queuePhase.notInQueue", "You are not in the queue right now.");
+	        en.Add("queuePhase.notReadyYet", "Queue is not finished yet!");
+	        en.Add("readyPhase.ready", "Ready!");
+	        en.Add("pickPhase.started",  "Readycheck complete, starting picking phase! First picking turn: Team 1 \n Team 1 Captain:");
+	        en.Add("pickPhase.team2Captain",  "Team 2 Captain:");
+	        en.Add("pickPhase.instructions",  "Pick players using ***!pick NUMBER***");
+	        //en.Add("txt13",  "It seems you're not in the queue.");
+	        en.Add("pickPhase.team2Turn",  "Player added to Team 1!\n Team 2 Turn to pick!");
+	        en.Add("pickPhase.team1Turn", "Player added to Team 2! \n Team 1 Turn to pick!");
+	        en.Add("pickPhase.unpicked", "***Remaining players:***");
+	        en.Add("pickPhase.alreadyPicked", "That player is already in a team!");
+	        en.Add("pickPhase.unknownIndex", "Couldn't place a player with that index");
+	        en.Add("pickPhase.notYourTurn", "Not your turn to pick right now!");
+	        en.Add("pickPhase.notCaptain", "You are not the captain of either teams. Picking is restricted to captains.");
+	        en.Add("queuePhase.emptyQueue", "Nobody in the queue! use ***!add***  to start queue!");
+	        en.Add("admin.resetSuccessful", "All lists emptied successfully.");
+	        en.Add("status.pickedTeams", "Selected teams");
+	        en.Add("status.queueStatus", "current queue");
+	        en.Add("info.purposeAnswer", "Get people to gather and play together");
+	        en.Add("info.funFactAnswer", "Only a droplet of coffee was used to develop this bot. :thinking:");
+	        en.Add("info.developer", "Developer");
+	        en.Add("info.purpose", "Purpose");
+	        en.Add("info.funFact", "Fun fact");
+	        en.Add("info.commands", "Commands");
+	        en.Add("status.queuePlayers", "Players");
+	        en.Add("status.notReady", "NOT READY YET:");
+	        //en.Add("txt32", "Removed because status is ***Offline***");
+	        //en.Add("txt33", "Starting Readycheck timer, you have 60 seconds to ***!ready*** yourself.");
+	        en.Add("readyPhase.timeout", "Not all players were ready during the readycheck. Returning to queue with players that were ready.");
+	        en.Add("readyPhase.cannotAdd", "Wait until the picking phase is over.");
+	        en.Add("readyPhase.alreadyMarkedReady", "You have already readied!");
+            en.Add("fatKid.top10", "Top 10 Fat Kids");
+            en.Add("fatKid.singleStatus", "{0} has been the fat kid {1} times ({2}/{3})");
+            en.Add("highScores.top10", "Top 10 Gathering LEGENDS");
+            en.Add("highScores.statusSingle", "{0} has played {1} games ({2}/{3})");
         }
 
         public async Task Run()
@@ -207,7 +214,7 @@ namespace K8GatherBot
             Snowflake xx = new Snowflake();
             ulong xxid = (ulong)Convert.ToInt64(ProgHelpers.usechannel);
             xx.Id = xxid;
-            ITextChannel textChannel = (ITextChannel)shard.Application.HttpApi.Channels.CreateMessage(xx, ProgHelpers.txt34);
+            ITextChannel textChannel = (ITextChannel)shard.Application.HttpApi.Channels.CreateMessage(xx, ProgHelpers.locale["readyPhase.timeout"]);
             await shard.StopAsync();
         }
 
@@ -289,14 +296,14 @@ namespace K8GatherBot
                             if (ProgHelpers.queue.Count == ProgHelpers.qcount)
                             {
                                 //readycheck in process, cant add anymore
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt1);
+                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
                             }
                             else
                             {
                                 //Additional check, check if the picking phase is in progress...
                                 if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
                                 {
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt36);
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.alreadyMarkedReady"]);
                                 }
                                 else
                                 {
@@ -311,7 +318,7 @@ namespace K8GatherBot
                                         //add player to queue
                                         ProgHelpers.queueids.Add(aa);
                                         ProgHelpers.queue.Add(bb);
-                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt2 + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                         Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                         //check if queue is full
                                         if (ProgHelpers.queue.Count == ProgHelpers.qcount)
@@ -322,13 +329,13 @@ namespace K8GatherBot
                                                 phlist.Add("<@" + item + ">");
                                             }
                                             //if queue complete, announce readychecks
-                                            await textChannel.CreateMessage(ProgHelpers.txt3 + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
+                                            await textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
                                             StartTimer();
                                         }
                                     }
                                     else
                                     {
-                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt4 + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                         Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
                                     }
                                 }
@@ -351,13 +358,13 @@ namespace K8GatherBot
                         if (ProgHelpers.queue.Count == ProgHelpers.qcount)
                         {
                             //too late to bail out
-                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt5);
+                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.locale["pickPhase.cannotRemove"]);
                         }
                         else
                         {
                             if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
                             {
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt36);
+                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.cannotAdd"]);
                             }
                             else
                             {
@@ -372,13 +379,13 @@ namespace K8GatherBot
                                     ProgHelpers.queue.RemoveAt(inx);
                                     //queue.Remove(message.Author.Username);
 
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt6 + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.removed"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                     Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
                                 }
                                 else
                                 {
 
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt7);
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notInQueue"]);
                                     Console.WriteLine("!remove - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
                                 }
                             }
@@ -407,7 +414,7 @@ namespace K8GatherBot
                             //check if person has added himself in the queue
                             if (ProgHelpers.queue.Count != ProgHelpers.qcount)
                             {
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt8+" "+ ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                             }
                             else
                             {
@@ -416,7 +423,7 @@ namespace K8GatherBot
                                 if (checkExists != null)
                                 {
                                     //Person has already readied
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt35 + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.timeout"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                 }
                                 else
                                 {
@@ -425,7 +432,7 @@ namespace K8GatherBot
                                     //place person in readycheck queue
                                     ProgHelpers.readycheckids.Add(aa);
                                     ProgHelpers.readycheck.Add(bb);
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt9 + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
                                     //if readycheck completes the queue, start captainpick phase, clear readycheck queue in process
                                     if (ProgHelpers.readycheckids.Count == ProgHelpers.qcount)
                                     {
@@ -492,7 +499,7 @@ namespace K8GatherBot
                                             count++;
                                         }
 
-                                        await textChannel.CreateMessage(ProgHelpers.txt10 + " " + "<@" + c1i + ">" + "\n" + ProgHelpers.txt11 + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.txt12 + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
+                                        await textChannel.CreateMessage(ProgHelpers.locale["pickPhase.started"] + " " + "<@" + c1i + ">" + "\n" + ProgHelpers.locale["pickPhase.team2Captain"] + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.locale["pickPhase.instructions"] + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
 
 
 
@@ -503,7 +510,7 @@ namespace K8GatherBot
                         }
                         else
                         {
-                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt13);
+                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ ProgHelpers.locale["pickPhase.instructions"]);
                         }
                         Console.WriteLine("!ready" + " --- " + DateTime.Now);
                     }
@@ -563,22 +570,22 @@ namespace K8GatherBot
                                             //post the remaining players, take into account that last player in the queue is being automatically added
                                             if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                             {
-                                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt14+" <@" + ProgHelpers.captain2id + "> \n "+ProgHelpers.txt15+" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
+                                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ ProgHelpers.locale["pickPhase.team2Turn"] +" <@" + ProgHelpers.captain2id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                             }
                                         }
                                         else
                                         {
-                                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt16);
+                                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ ProgHelpers.locale["pickPhase.alreadyPicked"]);
                                         }
                                     }
                                     else
                                     {
-                                        await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt16);
+                                        await textChannel.CreateMessage($"<@{message.Author.Id}> "+ ProgHelpers.locale["pickPhase.alreadyPicked"]);
                                     }
                                 }
                                 else
                                 {
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt17);
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
                                 }
                                 //if exists, place index in other list. 
 
@@ -620,22 +627,22 @@ namespace K8GatherBot
                                             //post the remaining players, take into account that last player in the queue is being automatically added
                                             if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
                                             {
-                                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt14x+ "<@" + ProgHelpers.captain1id + "> \n "+ProgHelpers.txt15+" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
+                                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team1Turn"] + "<@" + ProgHelpers.captain1id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] +" \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                                             }
                                         }
                                         else
                                         {
-                                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt16);
+                                            await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
                                         }
                                     }
                                     else
                                     {
-                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt16);
+                                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
                                     }
                                 }
                                 else
                                 {
-                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.txt17);
+                                    await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
                                 }
                                 //if exists, place index in other list. 
 
@@ -698,7 +705,7 @@ namespace K8GatherBot
                                     ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1ids.Concat(ProgHelpers.team2ids).ToList(), ProgHelpers.team1.Concat(ProgHelpers.team2).ToList());
                                     await textChannel.CreateMessage(new DiscordMessageDetails()
                                      .SetEmbed(new DiscordEmbedBuilder()
-                                     .SetTitle($"kitsun8's Gatheriino, "+ProgHelpers.txt22)
+                                     .SetTitle($"kitsun8's Gatheriino, "+ ProgHelpers.locale["admin.resetSuccessful"])
                                      .SetFooter("Discore (.NET Core), C#, "+ProgHelpers.txtversion)
                                      .SetColor(DiscordColor.FromHexadecimal(0xff9933))
                                      .AddField("Team1: ", string.Join("\n", ProgHelpers.team1.Cast<string>().ToArray()), true)
@@ -729,11 +736,11 @@ namespace K8GatherBot
                         {
                             if (message.Author.Id.Id.ToString() == ProgHelpers.captain2id || message.Author.Id.Id.ToString() == ProgHelpers.captain1id)
                             {
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt18);
+                                await textChannel.CreateMessage($"<@{message.Author.Id}> " +  ProgHelpers.locale["pickPhase.notYourTurn"]);
                             }
                             else
                             {
-                                await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt19);
+                                await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notCaptain"]);
                             }
                         }
                         Console.WriteLine("!pick" + " --- " + DateTime.Now);
@@ -813,7 +820,7 @@ namespace K8GatherBot
                         string msg = message.Content;
                         string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
                         Console.WriteLine("fatkid name split resulted in " + userName);
-                        string fatKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.txtFatKidSingle);
+                        string fatKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["fatKid.singleStatus"]);
 
                         await textChannel.CreateMessage($"<@{message.Author.Id}> " + fatKidInfo);
 					} catch 
@@ -834,7 +841,7 @@ namespace K8GatherBot
                                               .SetTitle($"kitsun8's Gatheriino")
                                               .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
                                               .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                                              .AddField(ProgHelpers.txtFatKidTop, fatKidTop10)));
+                                              .AddField(ProgHelpers.locale["fatKid.top10"], fatKidTop10)));
                     } catch (Exception ex) 
                     {
                         Console.WriteLine("EX-!f10 --- " + DateTime.Now);
@@ -851,7 +858,7 @@ namespace K8GatherBot
 						string msg = message.Content;
 						string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
 						Console.WriteLine("fatkid name split resulted in " + userName);
-                        string hsInfo = ProgHelpers.persistedData.GetHighScoreInfo(userName, ProgHelpers.txtHighScoreSingle);
+                        string hsInfo = ProgHelpers.persistedData.GetHighScoreInfo(userName, ProgHelpers.locale["highScores.statusSingle"]);
 
 						await textChannel.CreateMessage($"<@{message.Author.Id}> " + hsInfo);
 					}
@@ -873,7 +880,7 @@ namespace K8GatherBot
 											  .SetTitle($"kitsun8's Gatheriino")
 											  .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
 											  .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                                              .AddField(ProgHelpers.txtHighScoresTop, highScoreTop10)));
+                                              .AddField(ProgHelpers.locale["highScores.top10"], highScoreTop10)));
 					}
 					catch (Exception ex)
 					{
@@ -904,7 +911,7 @@ namespace K8GatherBot
                                     .SetTitle($"kitsun8's GatherBot, readycheck  " + "(" + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + ")")
                                     .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
                                     .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                                    .AddField(ProgHelpers.txt31 + " ", string.Join("\n", notinlist.Cast<string>().ToArray()), false)
+                                    .AddField(ProgHelpers.locale["status.queuePlayers"] + " ", string.Join("\n", notinlist.Cast<string>().ToArray()), false)
                                     ));
                                 
                             }
@@ -915,7 +922,7 @@ namespace K8GatherBot
                                     //picking phase
                                     await textChannel.CreateMessage(new DiscordMessageDetails()
                                     .SetEmbed(new DiscordEmbedBuilder()
-                                    .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.txt22)
+                                    .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.locale["status.pickedTeams"])
                                     .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
                                     .SetColor(DiscordColor.FromHexadecimal(0xff9933))
                                     .AddField("Team1: ", string.Join("\n", ProgHelpers.team1.Cast<string>().ToArray()), true)
@@ -927,10 +934,10 @@ namespace K8GatherBot
                                     //queue phase
                                     await textChannel.CreateMessage(new DiscordMessageDetails()
                                     .SetEmbed(new DiscordEmbedBuilder()
-                                    .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.txt23 + " " + "(" + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + ")")
+                                    .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.locale["status.queueStatus"] + " " + "(" + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + ")")
                                     .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
                                     .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                                    .AddField(ProgHelpers.txt30 + " ", string.Join("\n", ProgHelpers.queue.Cast<string>().ToArray()), false)
+                                    .AddField(ProgHelpers.locale["status.pickedTeams"] + " ", string.Join("\n", ProgHelpers.queue.Cast<string>().ToArray()), false)
                                     ));
                                 }
                                 
@@ -940,7 +947,7 @@ namespace K8GatherBot
                         }
                         else
                         {
-                            await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt20);
+                            await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
                             Console.WriteLine("!status" + " --- " + DateTime.Now);
                         }
 
@@ -973,7 +980,7 @@ namespace K8GatherBot
                         ProgHelpers.readycheckids.Clear();
                         ProgHelpers.readycheck.Clear();
 
-                        await textChannel.CreateMessage($"<@{message.Author.Id}> "+ProgHelpers.txt21);
+                        await textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
                         Console.WriteLine("!resetbot" + " --- " + DateTime.Now);
                     }
                     catch (Exception)
@@ -996,10 +1003,10 @@ namespace K8GatherBot
                          .SetTitle($"kitsun8's GatherBot")
                          .SetFooter("Discore (.NET Core), C# , "+ProgHelpers.txtversion)
                          .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                         .AddField(ProgHelpers.txt26+" ", "kitsun8#4567", false)
-                         .AddField(ProgHelpers.txt27+" ", ProgHelpers.txt24, false)
-                         .AddField(ProgHelpers.txt28+" ", ProgHelpers.txt25, false)
-                         .AddField(ProgHelpers.txt29+" ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot", false)
+                         .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8#4567", false)
+                         .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["status.queueStatus"], false)
+                         .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
+                         .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore", false)
                         ));
 
                         Console.WriteLine($"!gatherinfo - " + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
