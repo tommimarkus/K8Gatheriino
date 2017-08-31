@@ -153,7 +153,7 @@ namespace K8GatherBot
             fi.Add("captain.statusSingle", "{0} on valittu kapteeniksi {1} kertaa ({2}/{3})");
             fi.Add("player.stats", "pelaajan tiedot");
 
-			en.Add("txt", "Please wait until the previous queue is handled.");
+			en.Add("pickPhase.alreadyInProcess", "Please wait until the previous queue is handled.");
 			en.Add("queuePhase.added", "Added!");
 			en.Add("readyPhase.started", "Queue is now full, proceed to mark yourself ready with ***!ready*** \n You have 60 seconds!");
 			en.Add("queuePhase.alreadyInQueue", "You're already in the queue!");
@@ -326,7 +326,7 @@ namespace K8GatherBot
                     await CmdPick(shard, message);
                     break;
                 case "!fakeriino": 
-                    cmdFakeriino(message);
+                    //CmdFakeriino(shard, message);
                     break;
 				case "!pstats":
 					await CmdPlayerStats(shard, message);
@@ -373,7 +373,6 @@ namespace K8GatherBot
 
         private async Task CmdPlayerStats(Shard shard, DiscordMessage message)
         { 
-            Console.WriteLine("wtf");
             try 
             {
                 ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
@@ -433,23 +432,8 @@ namespace K8GatherBot
             ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
             try
             {
-                ProgHelpers.team1.Clear();
-                ProgHelpers.team1ids.Clear();
-                ProgHelpers.team2.Clear();
-                ProgHelpers.team2ids.Clear();
-                ProgHelpers.captain1 = "";
-                ProgHelpers.captain2 = "";
-                ProgHelpers.captain1id = "";
-                ProgHelpers.captain2id = "";
-                ProgHelpers.pickturn = "";
-                ProgHelpers.draftchatids.Clear();
-                ProgHelpers.draftchatnames.Clear();
-                ProgHelpers.queue.Clear();
-                ProgHelpers.queueids.Clear();
-                ProgHelpers.readycheckids.Clear();
-                ProgHelpers.readycheck.Clear();
-
-                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.emptyQueue"]);
+                ResetQueue();
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["admin.resetSuccessful"]);
                 Console.WriteLine("!resetbot" + " --- " + DateTime.Now);
             }
             catch (Exception)
@@ -673,424 +657,308 @@ namespace K8GatherBot
 			}
 		}
 
-		private static void cmdFakeriino(DiscordMessage message)
+		private void CmdFakeriino(Shard shard, DiscordMessage message)
 		{
-            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "2", "kitsun8");
-            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
-            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
-            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "4", "hermanni");
-
-            //ProgHelpers.persistedData.AddThinKid("1", "pirate_patch");
-
-		//    if (message.Content.ToLower().StartsWith("!fakeriino"))
-		//    {
-		//        ProgHelpers.persistedData.AddFatKid("1", "pirate_patch");
-		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-		//        ProgHelpers.persistedData.AddFatKid("2", "kitsune");
-		//        ProgHelpers.persistedData.AddFatKid("3", "jonne");
-		//        ProgHelpers.persistedData.AddFatKid("3", "jonne");
-		//        ProgHelpers.persistedData.AddFatKid("4", "pyro");
-		//        ProgHelpers.persistedData.AddFatKid("4", "pyro");
-		//        ProgHelpers.persistedData.AddFatKid("4", "pyro");
-		//        ProgHelpers.persistedData.AddFatKid("4", "pyro-muutettu");
-		//        ProgHelpers.persistedData.AddFatKid("5", "herbert");
-		//        ProgHelpers.persistedData.AddFatKid("5", "herbert");
-
-		//        List<string> ids = new List<string>();
-		//        List<string> usernames = new List<string>();
-
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("1");
-		//        usernames.Add("pirate_patch");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("2");
-		//        usernames.Add("kitsune");
-		//        ids.Add("5");
-		//        usernames.Add("herbert");
-
-		//        ProgHelpers.persistedData.AddHighScores(ids, usernames);
-		//    }
+            ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+            HandleAdd(message, textChannel, "240432007908294656", "pirate_patch");
+            Thread.Sleep(100);
+            HandleAdd(message, textChannel, "111", "kerpo");
+            Thread.Sleep(100);
+            HandleAdd(message, textChannel, "222", "jonne");
+            Thread.Sleep(100);
+            HandleAdd(message, textChannel, "333", "spede");
+            Thread.Sleep(100);
+            HandleReady(message, textChannel, "240432007908294656", "pirate_patch");
+            Thread.Sleep(100);
+			HandleReady(message, textChannel, "111", "kerpo");
+            Thread.Sleep(100);
+			HandleReady(message, textChannel, "222", "jonne");
+            Thread.Sleep(100);
+			HandleReady(message, textChannel, "333", "spede");
+            Thread.Sleep(100);
 		}
 
-		private async Task CmdPick(Shard shard, DiscordMessage message)
+        private bool PickTeamMember(ITextChannel textChannel, DiscordUser author, string msg, List<string> teamIds, List<string> team, string nextCaptain)
         {
-            try
+			string[] msgsp = msg.Split(null);
+            int selectedIndex = 0;
+            var selectedPlayerId = "";
+            var selectedPlayerName = "";
+            if(!Int32.TryParse(msgsp[1], out selectedIndex))
             {
-                ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
-                if (message.Author.Id.Id.ToString() == ProgHelpers.pickturn)
-                {
-
-
-                    //pickturn for team1
-                    if (ProgHelpers.pickturn == ProgHelpers.captain1id)
-                    {
-                        //check if index exists, check if value of that index is already in a team
-                        //get the number (index) to "sel"
-                        var msg = message.Content;
-                        string[] msgsp = msg.Split(null);
-                        int sel = 0;
-                        var sels2 = "";
-                        var sels2name = "";
-                        Int32.TryParse(msgsp[1], out sel);
-
-                        if (ProgHelpers.queueids.ElementAtOrDefault(sel) != null)
-                        {
-                            //Assign string value of discord id and name 
-                            sels2 = ProgHelpers.queueids.ElementAtOrDefault(sel);
-                            sels2name = ProgHelpers.queue.ElementAtOrDefault(sel);
-
-                            //check if exists in current teams
-                            if (ProgHelpers.team1ids.IndexOf(sels2) == -1 && ProgHelpers.team2ids.IndexOf(sels2) == -1)
-                            {
-                                //checks complete, adding player to team
-                                ProgHelpers.team1.Add(sels2name);
-                                ProgHelpers.team1ids.Add(sels2);
-                                ProgHelpers.pickturn = ProgHelpers.captain2id;
-
-                                //find and remove player from playerlist shown to users
-                                int finderremover = ProgHelpers.draftchatids.IndexOf(sels2);
-                                ProgHelpers.draftchatnames.RemoveAt(finderremover);
-                                ProgHelpers.draftchatids.RemoveAt(finderremover);
-
-                                Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
-
-                                // add the first picked ie. the thin kid 
-                                if (ProgHelpers.team1ids.Count == 1) 
-                                {
-                                    ProgHelpers.persistedData.AddThinKid(sels2, sels2name);    
-                                }
-
-                                //post the remaining players, take into account that last player in the queue is being automatically added
-                                if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
-                                {
-                                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team2Turn"] + " <@" + ProgHelpers.captain2id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
-                                }
-                            }
-                            else
-                            {
-                                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
-                            }
-                        }
-                        else
-                        {
-                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
-                        }
-                        //if exists, place index in other list. 
-
-                    }
-                    //pickturn for team2
-                    else
-                    {
-                        //check if index exists, check if value of that index is already in a team
-                        //get the number (index) to "sel"
-                        var msg = message.Content;
-                        string[] msgsp = msg.Split(null);
-                        int sel = 0;
-                        var sels21 = "";
-                        var sels21name = "";
-                        Int32.TryParse(msgsp[1], out sel);
-
-                        if (ProgHelpers.queueids.ElementAtOrDefault(sel) != null)
-                        {
-                            //Assign string value of discord id and name                                   
-                            sels21 = ProgHelpers.queueids.ElementAtOrDefault(sel);
-                            sels21name = ProgHelpers.queue.ElementAtOrDefault(sel);
-
-                            //check if exists in current teams
-                            if (ProgHelpers.team1ids.IndexOf(sels21) == -1)
-                            {
-                                if (ProgHelpers.team2ids.IndexOf(sels21) == -1)
-                                {
-                                    //checks complete, adding player to team
-                                    ProgHelpers.team2.Add(sels21name);
-                                    ProgHelpers.team2ids.Add(sels21);
-                                    ProgHelpers.pickturn = ProgHelpers.captain1id;
-
-                                    //find and remove player from playerlist shown to users
-                                    int finderremover = ProgHelpers.draftchatids.IndexOf(sels21);
-                                    ProgHelpers.draftchatnames.RemoveAt(finderremover);
-                                    ProgHelpers.draftchatids.RemoveAt(finderremover);
-
-                                    Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
-                                    //post the remaining players, take into account that last player in the queue is being automatically added
-                                    if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count != (ProgHelpers.qcount - 1))
-                                    {
-                                        textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.team1Turn"] + "<@" + ProgHelpers.captain1id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
-                                    }
-                                }
-                                else
-                                {
-                                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
-                                }
-                            }
-                            else
-                            {
-                                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
-                            }
-                        }
-                        else
-                        {
-                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
-                        }
-                        //if exists, place index in other list. 
-
-                    }
-
-                    //01.08.2017 Check if queue has only one player left, if so, put it in team
-                    //This should lead to the queue completing in this loop
-                    if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count == (ProgHelpers.qcount - 1))
-                    {
-                        //Find out team that is picking
-                        if (ProgHelpers.pickturn == ProgHelpers.captain1id)
-                        {
-                            //Team1 is picking
-                            //Find out the remaining player
-                            var remainingPlayer = ProgHelpers.draftchatids.FirstOrDefault();
-                            var remainingPlayerIndex = ProgHelpers.queueids.IndexOf(remainingPlayer);
-                            var remainingPlayername = ProgHelpers.queue.ElementAtOrDefault(remainingPlayerIndex);
-
-                            //Put remaining player in picking team (pickturn has already gotten a new value above)
-                            ProgHelpers.team1.Add(remainingPlayername);
-                            ProgHelpers.team1ids.Add(remainingPlayer);
-                            ProgHelpers.persistedData.AddFatKid(remainingPlayer, remainingPlayername);
-
-                            //Clear draftchat names (you could say this is redundant but..)
-                            ProgHelpers.draftchatnames.Clear();
-                            ProgHelpers.draftchatids.Clear();
-
-                        }
-                        else
-                        {
-                            //Team2 is picking
-                            //Find out the remaining player
-                            var remainingPlayer = ProgHelpers.draftchatids.FirstOrDefault();
-                            var remainingPlayerIndex = ProgHelpers.queueids.IndexOf(remainingPlayer);
-                            var remainingPlayername = ProgHelpers.queue.ElementAtOrDefault(remainingPlayerIndex);
-
-                            //Put remaining player in picking team (pickturn has already gotten a new value above)
-                            ProgHelpers.team2.Add(remainingPlayername);
-                            ProgHelpers.team2ids.Add(remainingPlayer);
-                            ProgHelpers.persistedData.AddFatKid(remainingPlayer, remainingPlayername);
-
-                            //Clear draftchat names (you could say this is redundant but..)
-                            ProgHelpers.draftchatnames.Clear();
-                            ProgHelpers.draftchatids.Clear();
-                        }
-
-
-                    }
-
-                    //if queue completes with this pick, announce teams
-                    if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count == ProgHelpers.qcount)
-                    {
-                        ProgHelpers.queue.Clear();
-                        ProgHelpers.queueids.Clear();
-                        ProgHelpers.readycheckids.Clear();
-                        ProgHelpers.readycheck.Clear();
-
-                        if (ProgHelpers.queueids.Count == 0)
-                        {
-                            ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1ids.Concat(ProgHelpers.team2ids).ToList(), ProgHelpers.team1.Concat(ProgHelpers.team2).ToList());
-                            textChannel.CreateMessage(new DiscordMessageDetails()
-                             .SetEmbed(new DiscordEmbedBuilder()
-                             .SetTitle($"kitsun8's Gatheriino, " + ProgHelpers.locale["admin.resetSuccessful"])
-                             .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
-                             .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                             .AddField("Team1: ", string.Join("\n", ProgHelpers.team1.Cast<string>().ToArray()), true)
-                             .AddField("Team2: ", string.Join("\n", ProgHelpers.team2.Cast<string>().ToArray()), true)
-                              ));
-
-                            //clear other lists as well, resetting bot to default values, ready for another round!
-                            ProgHelpers.team1.Clear();
-                            ProgHelpers.team1ids.Clear();
-                            ProgHelpers.team2.Clear();
-                            ProgHelpers.team2ids.Clear();
-                            ProgHelpers.captain1 = "";
-                            ProgHelpers.captain2 = "";
-                            ProgHelpers.captain1id = "";
-                            ProgHelpers.captain2id = "";
-                            ProgHelpers.pickturn = "";
-                            ProgHelpers.draftchatids.Clear();
-                            ProgHelpers.draftchatnames.Clear();
-                            ProgHelpers.queue.Clear();
-                            ProgHelpers.queueids.Clear();
-                            ProgHelpers.readycheckids.Clear();
-                            ProgHelpers.readycheck.Clear();
-                        }
-                    }
-
-                }
-                else
-                {
-                    if (message.Author.Id.Id.ToString() == ProgHelpers.captain2id || message.Author.Id.Id.ToString() == ProgHelpers.captain1id)
-                    {
-                        textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notYourTurn"]);
-                    }
-                    else
-                    {
-                        textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.notCaptain"]);
-                    }
-                }
-                Console.WriteLine("!pick" + " --- " + DateTime.Now);
+                // ignore since it was garbage   
             }
-            catch (Exception)
+            if (ProgHelpers.queueids.ElementAtOrDefault(selectedIndex) == null)
             {
-                Console.WriteLine("EX-!pick" + " --- " + DateTime.Now);
+                textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase.unknownIndex"]);
+                return false;
             }
+
+			selectedPlayerId = ProgHelpers.queueids.ElementAtOrDefault(selectedIndex);
+			selectedPlayerName = ProgHelpers.queue.ElementAtOrDefault(selectedIndex);
+
+            if (ProgHelpers.team1ids.IndexOf(selectedPlayerId) > -1 || ProgHelpers.team2ids.IndexOf(selectedPlayerId) > -1)
+            {
+                textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase.alreadyPicked"]);
+                return false;
+            }
+
+            teamIds.Add(selectedPlayerId);
+            team.Add(selectedPlayerName);
+
+            int finderremover = ProgHelpers.draftchatids.IndexOf(selectedPlayerId);
+			ProgHelpers.draftchatnames.RemoveAt(finderremover);
+			ProgHelpers.draftchatids.RemoveAt(finderremover);
+
+            Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
+
+            // add thin kid (the first pick)
+            if (ProgHelpers.team1.Count + ProgHelpers.team2.Count == 1)
+            {
+                ProgHelpers.persistedData.AddThinKid(selectedPlayerId, selectedPlayerName);
+            }
+
+            ProgHelpers.pickturn = nextCaptain;
+
+            return true;
+		}
+
+        private void PickFatKid(List<string> teamids, List<string> teamNames) 
+        {
+			var remainingPlayer = ProgHelpers.draftchatids.FirstOrDefault();
+			var remainingPlayerIndex = ProgHelpers.queueids.IndexOf(remainingPlayer);
+			var remainingPlayername = ProgHelpers.queue.ElementAtOrDefault(remainingPlayerIndex);
+
+			//Put remaining player in picking team (pickturn has already gotten a new value above)
+            teamNames.Add(remainingPlayername);
+            teamids.Add(remainingPlayer);
+			ProgHelpers.persistedData.AddFatKid(remainingPlayer, remainingPlayername);
+
+			//Clear draftchat names (you could say this is redundant but..)
+			ProgHelpers.draftchatnames.Clear();
+			ProgHelpers.draftchatids.Clear();
+        }
+
+        private async Task CmdPick(Shard shard, DiscordMessage message) 
+        {
+            try 
+            {
+				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+                DiscordUser author = message.Author;
+                string messageAuthorId = author.Id.Id.ToString();
+
+                // verify message sender
+                if (messageAuthorId != ProgHelpers.pickturn)
+                {
+                    if (messageAuthorId == ProgHelpers.captain2id || messageAuthorId == ProgHelpers.captain1id)
+					{
+						textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase.notYourTurn"]);
+					}
+					else
+					{
+						textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase.notCaptain"]);
+					}
+                    return;
+                }
+
+                // execute team pick
+                string nextTeam = null;
+                bool pickSuccessful = false;
+                if(ProgHelpers.pickturn == ProgHelpers.captain1id)
+                {
+                    nextTeam = "team2";
+                    pickSuccessful = PickTeamMember(textChannel, author, message.Content, ProgHelpers.team1ids, ProgHelpers.team1, ProgHelpers.captain2id);    
+                } 
+                else 
+                {
+                    nextTeam = "team1";
+                    pickSuccessful = PickTeamMember(textChannel, author, message.Content, ProgHelpers.team2ids, ProgHelpers.team2, ProgHelpers.captain1id);						
+                }
+                if (!pickSuccessful) return;
+
+                // automatically pick the fat kid
+				if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count == (ProgHelpers.qcount - 1))
+				{
+                    if(ProgHelpers.pickturn == ProgHelpers.captain1id)
+                    {
+                        PickFatKid(ProgHelpers.team1ids, ProgHelpers.team1);
+                    } else 
+                    {
+                        PickFatKid(ProgHelpers.team2ids, ProgHelpers.team2);
+                    }                    				
+                } else {
+                    textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase." + nextTeam + "Turn"] + " <@" + ProgHelpers.captain2id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
+                }
+
+                // if all players have been picked show the teams and reset bot status
+				if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count == ProgHelpers.qcount)
+				{
+                				
+					ProgHelpers.persistedData.AddHighScores(ProgHelpers.team1ids.Concat(ProgHelpers.team2ids).ToList(), ProgHelpers.team1.Concat(ProgHelpers.team2).ToList());
+					textChannel.CreateMessage(new DiscordMessageDetails()
+					 .SetEmbed(new DiscordEmbedBuilder()
+					 .SetTitle($"kitsun8's Gatheriino, " + ProgHelpers.locale["status.pickedTeams"])
+					 .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
+					 .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+					 .AddField("Team1: ", string.Join("\n", ProgHelpers.team1.Cast<string>().ToArray()), true)
+					 .AddField("Team2: ", string.Join("\n", ProgHelpers.team2.Cast<string>().ToArray()), true)
+					  ));
+
+					//clear other lists as well, resetting bot to default values, ready for another round!
+					ResetQueue();
+				}
+
+            } catch (Exception e) 
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }        	
+
+        private static void ResetQueue()
+        {
+            ProgHelpers.team1.Clear();
+            ProgHelpers.team1ids.Clear();
+            ProgHelpers.team2.Clear();
+            ProgHelpers.team2ids.Clear();
+            ProgHelpers.captain1 = "";
+            ProgHelpers.captain2 = "";
+            ProgHelpers.captain1id = "";
+            ProgHelpers.captain2id = "";
+            ProgHelpers.pickturn = "";
+            ProgHelpers.draftchatids.Clear();
+            ProgHelpers.draftchatnames.Clear();
+            ProgHelpers.queue.Clear();
+            ProgHelpers.queueids.Clear();
+            ProgHelpers.readycheckids.Clear();
+            ProgHelpers.readycheck.Clear();
         }
 
         private async Task CmdReady(Shard shard, DiscordMessage message)
 		{
 			ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
 			try
-			{
-				var aa = message.Author.Id.Id.ToString();
-				var bb = message.Author.Username.ToString();
+            {
+                var authorId = message.Author.Id.Id.ToString();
+                var authorUserName = message.Author.Username.ToString();
 
-				if (ProgHelpers.queueids.IndexOf(aa) != -1)
-				{
+                HandleReady(message, textChannel, authorId, authorUserName);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("EX-!ready" + " --- " + DateTime.Now);
+            }
+        }
 
-					//check if person has added himself in the queue
-					if (ProgHelpers.queue.Count != ProgHelpers.qcount)
-					{
-						textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-					}
-					else
-					{
-						//01.08.2017 Check if person has ALREADY readied...
-						var checkExists = ProgHelpers.readycheckids.FirstOrDefault(x => x == aa);
-						if (checkExists != null)
-						{
-							//Person has already readied
-							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.timeout"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-						}
-						else
-						{
-							//Proceed
+        private void HandleReady(DiscordMessage message, ITextChannel textChannel, string authorId, string authorUserName)
+        {
+            if (ProgHelpers.queueids.IndexOf(authorId) != -1)
+            {
+                if (ProgHelpers.draftchatids.Count > 0) 
+                {
+                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyInProcess"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                    return;
+                }
+                //check if person has added himself in the queue
+                if (ProgHelpers.queue.Count != ProgHelpers.qcount)
+                {
+                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                    return;
+                }
+                    //01.08.2017 Check if person has ALREADY readied...
+                var checkExists = ProgHelpers.readycheckids.FirstOrDefault(x => x == authorId);
+                if (checkExists != null)
+                {
+                    //Person has already readied
+                    textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.alreadyMarkedReady"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                    return;
+                }
+                //Proceed
 
-							//place person in readycheck queue
-							ProgHelpers.readycheckids.Add(aa);
-							ProgHelpers.readycheck.Add(bb);
-							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.notReadyYet"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-							//if readycheck completes the queue, start captainpick phase, clear readycheck queue in process
-							if (ProgHelpers.readycheckids.Count == ProgHelpers.qcount)
-							{
-								//dispose of the currenttimer
-								_tm.Dispose();
-								ProgHelpers._counter = 0;
+                //place person in readycheck queue
+                ProgHelpers.readycheckids.Add(authorId);
+                ProgHelpers.readycheck.Add(authorUserName);
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.ready"] + " " + ProgHelpers.readycheckids.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                //if readycheck completes the queue, start captainpick phase, clear readycheck queue in process
+                if (ProgHelpers.readycheckids.Count == ProgHelpers.qcount)
+                {
+                    //dispose of the currenttimer
+                    _tm.Dispose();
+                    ProgHelpers._counter = 0;
 
-								//Dispose readychecks
-								ProgHelpers.readycheckids.Clear();
-								ProgHelpers.readycheck.Clear();
+                    //Dispose readychecks
+                    ProgHelpers.readycheckids.Clear();
+                    ProgHelpers.readycheck.Clear();
 
-								//Random captain 1
-								Random rnd = new Random();
-								int c1 = rnd.Next(ProgHelpers.queueids.Count);
-								string c1n = "";
-								string c1i = "";
+                    //Random captain 1
+                    Random rnd = new Random();
+                    int c1 = rnd.Next(ProgHelpers.queueids.Count);
+                    string c1n = "";
+                    string c1i = "";
 
-								c1n = ProgHelpers.queue[c1];
-								c1i = ProgHelpers.queueids[c1];
-								ProgHelpers.queue.RemoveAt(c1);
-								ProgHelpers.queueids.RemoveAt(c1);
-								ProgHelpers.captain1 = c1n;
-								ProgHelpers.captain1id = c1i;
-								ProgHelpers.team1.Add(c1n);
-								ProgHelpers.team1ids.Add(c1i);
+                    c1n = ProgHelpers.queue[c1];
+                    c1i = ProgHelpers.queueids[c1];
+                    ProgHelpers.queue.RemoveAt(c1);
+                    ProgHelpers.queueids.RemoveAt(c1);
+                    ProgHelpers.captain1 = c1n;
+                    ProgHelpers.captain1id = c1i;
+                    ProgHelpers.team1.Add(c1n);
+                    ProgHelpers.team1ids.Add(c1i);
 
-								//Random captain 2
-								Random rnd2 = new Random();
-								int c2 = rnd2.Next(ProgHelpers.queueids.Count);
-								string c2n = "";
-								string c2i = "";
+                    //Random captain 2
+                    Random rnd2 = new Random();
+                    int c2 = rnd2.Next(ProgHelpers.queueids.Count);
+                    string c2n = "";
+                    string c2i = "";
 
-								c2n = ProgHelpers.queue[c2];
-								c2i = ProgHelpers.queueids[c2];
-								ProgHelpers.queue.RemoveAt(c2);
-								ProgHelpers.queueids.RemoveAt(c2);
-								ProgHelpers.captain2 = c2n;
-								ProgHelpers.captain2id = c2i;
-								ProgHelpers.team2.Add(c2n);
-								ProgHelpers.team2ids.Add(c2i);
+                    c2n = ProgHelpers.queue[c2];
+                    c2i = ProgHelpers.queueids[c2];
+                    ProgHelpers.queue.RemoveAt(c2);
+                    ProgHelpers.queueids.RemoveAt(c2);
+                    ProgHelpers.captain2 = c2n;
+                    ProgHelpers.captain2id = c2i;
+                    ProgHelpers.team2.Add(c2n);
+                    ProgHelpers.team2ids.Add(c2i);
 
-                                ProgHelpers.persistedData.AddCaptains(c1i, c1n, c2i, c2n);
+                    ProgHelpers.persistedData.AddCaptains(c1i, c1n, c2i, c2n);
 
-								//Workaround to keep the initial numbering active for whole draft
-								ProgHelpers.draftchatids.AddRange(ProgHelpers.queueids);
-								List<string> draftlist = new List<string>();
-								int qcount = 0;
-								foreach (string item in ProgHelpers.queue)
-								{
-									draftlist.Add(qcount.ToString() + " - " + item);
-									qcount++;
-								}
-								ProgHelpers.draftchatnames.AddRange(draftlist);
+                    //Workaround to keep the initial numbering active for whole draft
+                    ProgHelpers.draftchatids.AddRange(ProgHelpers.queueids);
+                    List<string> draftlist = new List<string>();
+                    int qcount = 0;
+                    foreach (string item in ProgHelpers.queue)
+                    {
+                        draftlist.Add(qcount.ToString() + " - " + item);
+                        qcount++;
+                    }
+                    ProgHelpers.draftchatnames.AddRange(draftlist);
 
-								Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
-								Console.WriteLine(ProgHelpers.draftchatids.Cast<string>().ToArray());
+                    Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
+                    Console.WriteLine(ProgHelpers.draftchatids.Cast<string>().ToArray());
 
-								ProgHelpers.pickturn = ProgHelpers.captain1id; //initial pickturn
+                    ProgHelpers.pickturn = ProgHelpers.captain1id; //initial pickturn
 
 
-								List<string> phlist = new List<string>();
-								int count = 0;
-								foreach (string item in ProgHelpers.queue)
-								{
-									phlist.Add(count.ToString() + " - " + item);
-									count++;
-								}
+                    List<string> phlist = new List<string>();
+                    int count = 0;
+                    foreach (string item in ProgHelpers.queue)
+                    {
+                        phlist.Add(count.ToString() + " - " + item);
+                        count++;
+                    }
 
-								textChannel.CreateMessage(ProgHelpers.locale["pickPhase.started"] + " " + "<@" + c1i + ">" + "\n" 
-                                                          + ProgHelpers.locale["pickPhase.team2Captain"] + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.locale["pickPhase.instructions"] 
-                                                          + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
-							}
-						}
+                    textChannel.CreateMessage(ProgHelpers.locale["pickPhase.started"] + " " + "<@" + c1i + ">" + "\n"
+                                              + ProgHelpers.locale["pickPhase.team2Captain"] + " " + "<@" + c2i + ">" + "\n" + ProgHelpers.locale["pickPhase.instructions"]
+                                              + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
+                }
+            }
+            else
+            {
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.alreadyInProcess"]);
+            }
+            Console.WriteLine("!ready" + " --- " + DateTime.Now);
+        }
 
-					}
-				}
-				else
-				{
-					textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["pickPhase.instructions"]);
-				}
-				Console.WriteLine("!ready" + " --- " + DateTime.Now);
-			}
-			catch (Exception)
-			{
-				Console.WriteLine("EX-!ready" + " --- " + DateTime.Now);
-			}
-		}
-
-		private async Task CmdRemove(Shard shard, DiscordMessage message)
+        private async Task CmdRemove(Shard shard, DiscordMessage message)
 		{
 			ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
 			try
@@ -1143,65 +1011,68 @@ namespace K8GatherBot
 		private async Task CmdAdd(Shard shard, DiscordMessage message)
 		{
 			ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+			var authorId = message.Author.Id.Id.ToString();
+			var authorUserName = message.Author.Username.ToString();
 			try
 			{
-
-				if (ProgHelpers.queue != null)
-				{
-					if (ProgHelpers.queue.Count == ProgHelpers.qcount)
-					{
-						//readycheck in process, cant add anymore
-						textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
-					}
-					else
-					{
-						//Additional check, check if the picking phase is in progress...
-						if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
-						{
-							textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.alreadyMarkedReady"]);
-						}
-						else
-						{
-							var aa = message.Author.Id.Id.ToString();
-							var bb = message.Author.Username.ToString();
-							var findx = ProgHelpers.queueids.Find(item => item == aa);
-							if (findx == null)
-							{
-								//check offline players
-								//await Offlinecheck();
-
-								//add player to queue
-								ProgHelpers.queueids.Add(aa);
-								ProgHelpers.queue.Add(bb);
-								textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-								Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-								//check if queue is full
-								if (ProgHelpers.queue.Count == ProgHelpers.qcount)
-								{
-									List<string> phlist = new List<string>();
-									foreach (string item in ProgHelpers.queueids)
-									{
-										phlist.Add("<@" + item + ">");
-									}
-									//if queue complete, announce readychecks
-									textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
-									StartTimer();
-								}
-							}
-							else
-							{
-								textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-								Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
-							}
-						}
-
-					}
-				}
+                HandleAdd(message, textChannel, authorId, authorUserName);                       
 			}
 			catch (Exception)
 			{
 				Console.WriteLine("EX-!add" + " --- " + DateTime.Now);
 			}
 		}
-	}
+
+        private void HandleAdd(DiscordMessage message, ITextChannel textChannel, string authorId, string authorUserName)
+        {
+        	if (ProgHelpers.queue != null)
+        	{
+        		if (ProgHelpers.queue.Count == ProgHelpers.qcount)
+        		{
+        			//readycheck in process, cant add anymore
+        			textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
+        		}
+        		else
+        		{
+        			//Additional check, check if the picking phase is in progress...
+        			if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
+        			{
+        				textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.cannotAdd"]);
+        			}
+        			else
+        			{
+                        var findx = ProgHelpers.queueids.Find(item => item == authorId);
+                        if (findx == null)
+                        {
+                            //check offline players
+                            //await Offlinecheck();
+
+                            //add player to queue
+                            ProgHelpers.queueids.Add(authorId);
+                            ProgHelpers.queue.Add(authorUserName);
+                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                            Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                            //check if queue is full
+                            if (ProgHelpers.queue.Count == ProgHelpers.qcount)
+                            {
+                                List<string> phlist = new List<string>();
+                                foreach (string item in ProgHelpers.queueids)
+                                {
+                                    phlist.Add("<@" + item + ">");
+                                }
+                                //if queue complete, announce readychecks
+                                textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
+                                StartTimer();
+                            }
+                        }
+                        else
+                        {
+                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                            Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+                        }
+					}
+				}
+			}
+        }
+    }
 }
