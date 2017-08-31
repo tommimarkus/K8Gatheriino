@@ -787,7 +787,7 @@ namespace K8GatherBot
                         PickFatKid(ProgHelpers.team2ids, ProgHelpers.team2);
                     }                    				
                 } else {
-                    textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase." + nextTeam + "Turn"] + " <@" + ProgHelpers.captain2id + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
+                    textChannel.CreateMessage($"<@{author.Id}> " + ProgHelpers.locale["pickPhase." + nextTeam + "Turn"] + " <@" + ProgHelpers.pickturn + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));
                 }
 
                 // if all players have been picked show the teams and reset bot status
