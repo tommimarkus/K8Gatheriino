@@ -589,18 +589,19 @@ namespace K8GatherBot
 				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
 				string msg = message.Content;
 				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
-				Console.WriteLine("fatkid name split resulted in " + userName);
-                string captainInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["captain.singleStatus"]);
+				Console.WriteLine("captain name split resulted in " + userName);
+                string captainInfo = ProgHelpers.persistedData.GetCaptainInfo(userName, ProgHelpers.locale["captain.statusSingle"]);
 				textChannel.CreateMessage($"<@{message.Author.Id}> " + captainInfo);
 			}
-			catch
+			catch (Exception e)
 			{
 				Console.WriteLine("EX-!captain" + " --- " + DateTime.Now);
+                Console.WriteLine(e.ToString());
 			}
 		}
 
 		private async Task CmdHighScore(Shard shard, DiscordMessage message)
-		{
+        {
 			try
 			{
 				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
@@ -662,7 +663,7 @@ namespace K8GatherBot
 				string msg = message.Content;
 				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
 				Console.WriteLine("fatkid name split resulted in " + userName);
-				string thinKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["thinKid.singleStatus"]);
+				string thinKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["thinKid.statusSingle"]);
 
                 textChannel.CreateMessage($"<@{message.Author.Id}> " + thinKidInfo);
 			}
@@ -674,12 +675,12 @@ namespace K8GatherBot
 
 		private static void cmdFakeriino(DiscordMessage message)
 		{
-            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "2", "kitsun8");
-            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
-            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
-            ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "4", "hermanni");
+            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "2", "kitsun8");
+            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
+            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "3", "elvis");
+            //ProgHelpers.persistedData.AddCaptains("1", "pirate_patch", "4", "hermanni");
 
-            ProgHelpers.persistedData.AddThinKid("1", "pirate_patch");
+            //ProgHelpers.persistedData.AddThinKid("1", "pirate_patch");
 
 		//    if (message.Content.ToLower().StartsWith("!fakeriino"))
 		//    {
