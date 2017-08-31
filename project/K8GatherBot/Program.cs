@@ -139,14 +139,19 @@ namespace K8GatherBot
 			fi.Add("readyPhase.timeout", "Kaikki pelaajat eivät olleet valmiita readycheckin aikana. Palataan jonoon valmiina olleiden pelaajien kanssa.");
 			fi.Add("readyPhase.alreadyMarkedReady", "Olet jo merkinnyt itsesi valmiiksi!");
 			fi.Add("readyPhase.cannotAdd", "Odota poimintavaiheen päättymistä!");
+            fi.Add("fatKid.header", "Viimeiseksi valittu");
 			fi.Add("fatKid.top10", "Top10 viimeisenä valitut");
-			fi.Add("fatKid.singleStatus", "{0} on valittu viimeisenä {1} kertaa ({2}/{3})");
+			fi.Add("fatKid.statusSingle", "{0} on valittu viimeisenä {1} kertaa ({2}/{3})");
+            fi.Add("highScores.header", "Gathuja pelattu");
 			fi.Add("highScores.top10", "Top10 gathuLEGENDAT");
 			fi.Add("highScores.statusSingle", "{0} on pelannut {1} gathua ({2}/{3})");
+            fi.Add("thinKid.header", "1. varaus");
             fi.Add("thinKid.top10", "Top10 ensimmäisenä valitut");
-            fi.Add("thinKid.statusSingle", "{0} on valittu ensimmäisenä {1} kertaa ({2}/{3}");
+            fi.Add("thinKid.statusSingle", "{0} on valittu ensimmäisenä {1} kertaa ({2}/{3})");
+            fi.Add("captain.header", "Kapteeni");
 			fi.Add("captain.top10", "Top10 kapteenit");
-			fi.Add("captain.statusSingle", "{0} on valittu kapteeniksi {1} kertaa ({2}/{3}");
+            fi.Add("captain.statusSingle", "{0} on valittu kapteeniksi {1} kertaa ({2}/{3})");
+            fi.Add("player.stats", "pelaajan tiedot");
 
 			en.Add("txt", "Please wait until the previous queue is handled.");
 			en.Add("queuePhase.added", "Added!");
@@ -185,14 +190,19 @@ namespace K8GatherBot
 			en.Add("readyPhase.timeout", "Not all players were ready during the readycheck. Returning to queue with players that were ready.");
 			en.Add("readyPhase.cannotAdd", "Wait until the picking phase is over.");
 			en.Add("readyPhase.alreadyMarkedReady", "You have already readied!");
+            en.Add("fatKid.header", "Fat Kid");
 			en.Add("fatKid.top10", "Top 10 Fat Kids");
-			en.Add("fatKid.singleStatus", "{0} has been the fat kid {1} times ({2}/{3})");
+			en.Add("fatKid.statusSingle", "{0} has been the fat kid {1} times ({2}/{3})");
+            en.Add("highScores.header", "Games played");
 			en.Add("highScores.top10", "Top 10 Gathering LEGENDS");
 			en.Add("highScores.statusSingle", "{0} has played {1} games ({2}/{3})");
+            en.Add("thinKid.header", "Thin kid");
 			en.Add("thinKid.top10", "Top10 Thin Kids");
 			en.Add("thinKid.statusSingle", "{0} has been the thin kid {1} times ({2}/{3}");
+            en.Add("captain.header", "Captain");
 			en.Add("captain.top10", "Top10 Captains");
 			en.Add("captain.statusSingle", "{0} has been selected captain {1} times ({2}/{3}");
+            en.Add("player.stats", "player stats");
 		}
 
 		public async Task Run()
@@ -296,7 +306,7 @@ namespace K8GatherBot
                 return;
             }
 
-            string msgBody = message.Content.ToLower();
+            string msgBody = message.Content.ToLower().Split(' ')[0];
 
             switch (msgBody)
             {
@@ -318,6 +328,9 @@ namespace K8GatherBot
                 case "!fakeriino": 
                     cmdFakeriino(message);
                     break;
+				case "!pstats":
+					await CmdPlayerStats(shard, message);
+					break;
                 case "!fatkid":
                     await CmdFatKid(shard, message);
                     break;
@@ -356,6 +369,38 @@ namespace K8GatherBot
                     break;
             }
 
+        }
+
+        private async Task CmdPlayerStats(Shard shard, DiscordMessage message)
+        { 
+            Console.WriteLine("wtf");
+            try 
+            {
+                ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+				string msg = message.Content;
+				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
+                Console.WriteLine("userName for checking " + userName);
+                string highScoreStats = ProgHelpers.persistedData.GetHighScoreInfo(userName, ProgHelpers.locale["highScores.statusSingle"]);
+                string fatkidStats = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["fatKid.statusSingle"]);
+                string captainStats = ProgHelpers.persistedData.GetCaptainInfo(userName, ProgHelpers.locale["captain.statusSingle"]);
+                string thinkidStats = ProgHelpers.persistedData.GetThinKidInfo(userName, ProgHelpers.locale["thinKid.statusSingle"]);
+
+				textChannel.CreateMessage(new DiscordMessageDetails()
+					.SetEmbed(new DiscordEmbedBuilder()
+                              .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.locale["player.stats"] + ": " + userName)
+							  .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
+							  .SetColor(DiscordColor.FromHexadecimal(0xff9933))
+                              .AddField(ProgHelpers.locale["highScores.header"], highScoreStats, true)
+                              .AddField(ProgHelpers.locale["captain.header"], captainStats, true)
+                              .AddField(ProgHelpers.locale["thinKid.header"], thinkidStats, true)
+                              .AddField(ProgHelpers.locale["fatKid.header"], fatkidStats, true)));
+                Console.WriteLine("oi");
+
+			} catch (Exception e)
+            {
+                Console.WriteLine($"!gatherinfo - EX -" + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
+                Console.WriteLine(e.ToString());
+		    }
         }
 
         private async Task CmdGatherInfo(Shard shard, DiscordMessage message)
@@ -579,7 +624,7 @@ namespace K8GatherBot
 				string msg = message.Content;
 				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
 				Console.WriteLine("fatkid name split resulted in " + userName);
-				string fatKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["fatKid.singleStatus"]);
+				string fatKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["fatKid.statusSingle"]);
 				textChannel.CreateMessage($"<@{message.Author.Id}> " + fatKidInfo);
 			}
 			catch
