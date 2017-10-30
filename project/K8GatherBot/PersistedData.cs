@@ -93,26 +93,32 @@ namespace K8GatherBot
             entry.Add();
         }
 
-        public string GetFatKidInfo(string userName, string response) {
-            return GetInfo(fatKids, userName, response);
+        public string GetFatKidInfo(Tuple<string, string> idUsername, string response) {
+            return GetInfo(fatKids, idUsername, response);
         }
 
-        public string GetThinKidInfo(string userName, string response) {
-            return GetInfo(thinKids, userName, response);
+        public string GetThinKidInfo(Tuple<string, string> idUsername, string response) {
+            return GetInfo(thinKids, idUsername, response);
         }
 
-        public string GetHighScoreInfo(string userName, string response) {
-            return GetInfo(highScores, userName, response);
+        public string GetHighScoreInfo(Tuple<string, string> idUsername, string response) {
+            return GetInfo(highScores, idUsername, response);
         }
 
-        public string GetCaptainInfo(string userName, string response) {
-            return GetInfo(captains, userName, response);
+        public string GetCaptainInfo(Tuple<string, string> idUsername, string response) {
+            return GetInfo(captains, idUsername, response);
         }
 
-        private string GetInfo(List<UserData> data, string userName, string response) {
-            UserData entry = data.Find(x => x.userName.Equals(userName));
+        private string GetInfo(List<UserData> data, Tuple<string, string> idUsername, string response) {
+            UserData entry = null;
+            if(idUsername.Item1 != null) {
+                entry = data.Find(x => x.id.Equals(idUsername.Item1));
+            } else {
+                entry = data.Find(x => x.userName.Equals(idUsername.Item2));
+            }
+             
             if (entry == null) {
-                return String.Format(response, userName, 0, data.Count, data.Count);
+                return String.Format(response, idUsername.Item2, 0, data.Count, data.Count);
             }
             return String.Format(response, entry.userName, entry.count, data.IndexOf(entry) + 1, data.Count);
         }
