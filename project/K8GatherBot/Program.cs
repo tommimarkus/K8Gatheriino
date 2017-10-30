@@ -646,7 +646,7 @@ namespace K8GatherBot
 				ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
 				string msg = message.Content;
 				string userName = msg.Substring(msg.Split(' ')[0].Length + 1);
-				Console.WriteLine("fatkid name split resulted in " + userName);
+				Console.WriteLine("thinkid name split resulted in " + userName);
 				string thinKidInfo = ProgHelpers.persistedData.GetFatKidInfo(userName, ProgHelpers.locale["thinKid.statusSingle"]);
 
                 textChannel.CreateMessage($"<@{message.Author.Id}> " + thinKidInfo);
@@ -713,7 +713,7 @@ namespace K8GatherBot
             Console.WriteLine(ProgHelpers.draftchatnames.Cast<string>().ToArray());
 
             // add thin kid (the first pick)
-            if (ProgHelpers.team1.Count + ProgHelpers.team2.Count == 1)
+            if (ProgHelpers.team1.Count + ProgHelpers.team2.Count == 3)
             {
                 ProgHelpers.persistedData.AddThinKid(selectedPlayerId, selectedPlayerName);
             }
@@ -1025,54 +1025,51 @@ namespace K8GatherBot
 
         private void HandleAdd(DiscordMessage message, ITextChannel textChannel, string authorId, string authorUserName)
         {
-        	if (ProgHelpers.queue != null)
-        	{
-        		if (ProgHelpers.queue.Count == ProgHelpers.qcount)
-        		{
-        			//readycheck in process, cant add anymore
-        			textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
-        		}
-        		else
-        		{
-        			//Additional check, check if the picking phase is in progress...
-        			if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
-        			{
-        				textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.cannotAdd"]);
-        			}
-        			else
-        			{
-                        var findx = ProgHelpers.queueids.Find(item => item == authorId);
-                        if (findx == null)
-                        {
-                            //check offline players
-                            //await Offlinecheck();
-
-                            //add player to queue
-                            ProgHelpers.queueids.Add(authorId);
-                            ProgHelpers.queue.Add(authorUserName);
-                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                            Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                            //check if queue is full
-                            if (ProgHelpers.queue.Count == ProgHelpers.qcount)
-                            {
-                                List<string> phlist = new List<string>();
-                                foreach (string item in ProgHelpers.queueids)
-                                {
-                                    phlist.Add("<@" + item + ">");
-                                }
-                                //if queue complete, announce readychecks
-                                textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
-                                StartTimer();
-                            }
-                        }
-                        else
-                        {
-                            textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
-                            Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
-                        }
-					}
-				}
+            if (ProgHelpers.queue == null) {
+                return;
+            }
+    		if (ProgHelpers.queue.Count == ProgHelpers.qcount)
+    		{
+    			//readycheck in process, cant add anymore
+    			textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["ready.alreadyInProcess"]);
+                return;
+    		}
+			//Additional check, check if the picking phase is in progress...
+			if (ProgHelpers.team1ids.Count + ProgHelpers.team2ids.Count > 0)
+			{
+				textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["readyPhase.cannotAdd"]);
+                return;
 			}
+            var findx = ProgHelpers.queueids.Find(item => item == authorId);
+            if (findx == null)
+            {
+                //check offline players
+                //await Offlinecheck();
+
+                //add player to queue
+                ProgHelpers.queueids.Add(authorId);
+                ProgHelpers.queue.Add(authorUserName);
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.added"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                //check if queue is full
+                if (ProgHelpers.queue.Count == ProgHelpers.qcount)
+                {
+                    List<string> phlist = new List<string>();
+                    foreach (string item in ProgHelpers.queueids)
+                    {
+                        phlist.Add("<@" + item + ">");
+                    }
+                    //if queue complete, announce readychecks
+                    textChannel.CreateMessage(ProgHelpers.locale["readyPhase.started"] + " \n" + string.Join("\t", phlist.Cast<string>().ToArray()));
+                    StartTimer();
+                }
+            }
+            else
+            {
+                textChannel.CreateMessage($"<@{message.Author.Id}> " + ProgHelpers.locale["queuePhase.alreadyInQueue"] + " " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString());
+                Console.WriteLine("!add - " + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + " --- " + DateTime.Now);
+            }
+						
         }
     }
 }
