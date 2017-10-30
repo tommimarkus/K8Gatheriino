@@ -414,7 +414,7 @@ namespace K8GatherBot
                     .SetFooter("Discore (.NET Core), C# , " + ProgHelpers.txtversion)
                     .SetColor(DiscordColor.FromHexadecimal(0xff9933))
                     .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8#4567", false)
-                    .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["status.queueStatus"], false)
+                    .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["info.purposeAnswer"], false)
                     .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
                     .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore, !tk10, !thinkid, !c10, !captain", false)
                 ));
@@ -488,7 +488,7 @@ namespace K8GatherBot
                             .SetTitle($"kitsun8's GatherBot, " + ProgHelpers.locale["status.queueStatus"] + " " + "(" + ProgHelpers.queue.Count.ToString() + "/" + ProgHelpers.qcount.ToString() + ")")
                             .SetFooter("Discore (.NET Core), C#, " + ProgHelpers.txtversion)
                             .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                            .AddField(ProgHelpers.locale["status.pickedTeams"] + " ", string.Join("\n", ProgHelpers.queue.Cast<string>().ToArray()), false)
+                            .AddField(ProgHelpers.locale["status.queueStatus"] + " ", string.Join("\n", ProgHelpers.queue.Cast<string>().ToArray()), false)
                             ));
                         }
 
