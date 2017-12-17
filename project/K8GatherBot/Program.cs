@@ -106,7 +106,7 @@ namespace K8GatherBot
             fi.Add("queuePhase.added", "Lisätty!");
             fi.Add("readyPhase.started", "Jono on nyt täynnä, merkitse itsesi valmiiksi käyttäen ***!ready*** komentoa. \n Aikaa 60 sekuntia!");
             fi.Add("queuePhase.alreadyInQueue", "Olet jo jonossa!");
-            fi.Add("pickPhase.cannotRemove", "Liian myöhäistä peruuttaa enää, odota jonon käsittelyn valmistumista.");
+            fi.Add("pickPhase.cannotRemove", "Liian myöhäistä peruuttaa, odota jonon käsittelyn valmistumista.");
             fi.Add("queuePhase.removed", "Poistettu!");
             fi.Add("queuePhase.notInQueue", "Et ole juuri nyt jonossa");
             fi.Add("queuePhase.notReadyYet", "Jono ei ole vielä valmis!");
@@ -127,7 +127,7 @@ namespace K8GatherBot
             fi.Add("status.pickedTeams", "Valitut joukkueet");
             fi.Add("status.queueStatus", "jonon tilanne");
             fi.Add("info.purposeAnswer", "Saada pelaajia keräytymään pelien äärelle!");
-            fi.Add("info.funFactAnswer", "Vain tilkka kahvia käytettiin kehitykseen. :thinking:");
+            fi.Add("info.funFactAnswer", "Gathut aiheuttavat paljon meemejä :thinking:");
             fi.Add("info.developer", "Kehittäjä");
             fi.Add("info.purpose", "Tarkoitus");
             fi.Add("info.funFact", "Tiesitkö");
@@ -202,7 +202,7 @@ namespace K8GatherBot
             en.Add("captain.header", "Captain");
             en.Add("captain.top10", "Top10 Captains");
             en.Add("captain.statusSingle", "{0} has been selected captain {1} times ({2}/{3}");
-            en.Add("player.stats", "player stats");
+            en.Add("player.stats", "Player statistics");
         }
 
         public async Task Run()
@@ -310,6 +310,9 @@ namespace K8GatherBot
 
             switch (msgBody)
             {
+                case "!abb": //haHAA!
+                case "! add": //haHAA!
+                case "!dab": //haHAA!
                 case "!add":
                     await CmdAdd(shard, message);
                     break;
@@ -335,6 +338,7 @@ namespace K8GatherBot
                     await CmdFatKid(shard, message);
                     break;
                 case "!f10":
+                case "!fat10":
                     await CmdFatTopTen(shard, message);
                     break;
                 case "!highscore":
@@ -342,6 +346,7 @@ namespace K8GatherBot
                     await CmdHighScore(shard, message);
                     break;
                 case "!topten":
+                case "!top10":
                     await CmdTopTen(shard, message);
                     break;  
                 case "!thinkid":
@@ -413,10 +418,10 @@ namespace K8GatherBot
                     .SetTitle($"kitsun8's GatherBot")
                     .SetFooter("Discore (.NET Core), C# , " + ProgHelpers.txtversion)
                     .SetColor(DiscordColor.FromHexadecimal(0xff9933))
-                    .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8#4567", false)
+                    .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8 & pirate_patch", false)
                     .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["info.purposeAnswer"], false)
                     .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
-                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10, !fatkid, !top10, !hs/highscore, !tk10, !thinkid, !c10, !captain", false)
+                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10/fat10, !fatkid, !top10/topten, !hs/highscore, !tk10, !thinkid, !c10, !captain", false)
                 ));
 
                 Console.WriteLine($"!gatherinfo - " + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
