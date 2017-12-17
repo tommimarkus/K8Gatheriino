@@ -24,3 +24,4 @@ Bot is running on Discore 2.4.1 (https://github.com/BundledSticksInkorperated/Di
 Project is running on .NET Core 1.1 / .NET Standard 1.6
 
 Language support added for english, default/original language was finnish. Can be changed from appsettings.json
+Thanks to hpr's additions, the bot also keeps track of players' statistics in separate CSV files. If the files are nonexistent, they will be created.
