@@ -29,6 +29,8 @@ namespace K8GatherBot
             public static List<string> queueids = new List<string>(); //discord ids
             public static List<string> readycheckids = new List<string>(); //readycheck
             public static List<string> readycheck = new List<string>(); //readychecknames
+            public static List<string> cptrandomids = new List<string>(); //captainrandoming
+            public static List<string> cptrandom = new List<string>(); //captainrandomingnames
 
             public static string captain1 = "";
             public static string captain1id = "";
@@ -152,6 +154,8 @@ namespace K8GatherBot
             fi.Add("captain.top10", "Top10 kapteenit");
             fi.Add("captain.statusSingle", "{0} on valittu kapteeniksi {1} kertaa ({2}/{3})");
             fi.Add("player.stats", "pelaajan tiedot");
+            fi.Add("noCap.text", "Sinua ei arvota enää kapteeniksi!");
+            fi.Add("yesCap.text", "Sinut voidaan nyt arpoa kapteeniksi!");
 
             en.Add("pickPhase.alreadyInProcess", "Please wait until the previous queue is handled.");
             en.Add("queuePhase.added", "Added!");
@@ -203,6 +207,8 @@ namespace K8GatherBot
             en.Add("captain.top10", "Top10 Captains");
             en.Add("captain.statusSingle", "{0} has been selected captain {1} times ({2}/{3}");
             en.Add("player.stats", "Player statistics");
+            en.Add("noCap.text", "You will no longer be randomed as the captain!");
+            en.Add("yesCap.text", "You may now be randomed to be the captain!");
         }
 
         public async Task Run()
@@ -313,6 +319,10 @@ namespace K8GatherBot
                 case "!abb": //haHAA!
                 case "! add": //haHAA!
                 case "!dab": //haHAA!
+                case "!abd": //haHAA!
+                case "!asd": //haHAA!
+                case "!das": //haHAA!
+                case "!a": //haHAA!
                 case "!add":
                     await CmdAdd(shard, message);
                     break;
@@ -372,6 +382,12 @@ namespace K8GatherBot
                 case "!gi":
                     await CmdGatherInfo(shard, message);
                     break;
+                case "!yescap":
+                    await CmdYesCap(shard, message);
+                    break;
+                case "!nocap":
+                    await CmdNoCap(shard, message);
+                    break;
             }
 
         }
@@ -421,7 +437,7 @@ namespace K8GatherBot
                     .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8 & pirate_patch", false)
                     .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["info.purposeAnswer"], false)
                     .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
-                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10/fat10, !fatkid, !top10/topten, !hs/highscore, !tk10, !thinkid, !c10, !captain", false)
+                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10/fat10, !fatkid, !top10/topten, !hs/highscore, !tk10, !thinkid, !c10, !captain, !nocap, !yescap", false)
                 ));
 
                 Console.WriteLine($"!gatherinfo - " + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
@@ -836,6 +852,8 @@ namespace K8GatherBot
             ProgHelpers.queueids.Clear();
             ProgHelpers.readycheckids.Clear();
             ProgHelpers.readycheck.Clear();
+            ProgHelpers.cptrandom.Clear();
+            ProgHelpers.cptrandomids.Clear();
         }
 
         private async Task CmdReady(Shard shard, DiscordMessage message)
@@ -851,6 +869,40 @@ namespace K8GatherBot
             catch (Exception)
             {
                 Console.WriteLine("EX-!ready" + " --- " + DateTime.Now);
+            }
+        }
+
+        private async Task CmdNoCap(Shard shard, DiscordMessage message)
+        {
+            ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+            try
+            {
+                var authorId = message.Author.Id.Id.ToString();
+                var authorUserName = message.Author.Username.ToString();
+                ProgHelpers.persistedData.AddNotMe(authorId, authorUserName);
+
+                textChannel.CreateMessage($"<@"+authorId+"> " + ProgHelpers.locale["noCap.text"]);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("EX-!NoCap" + " --- " + DateTime.Now);
+            }
+        }
+
+        private async Task CmdYesCap(Shard shard, DiscordMessage message)
+        {
+            ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+            try
+            {
+                var authorId = message.Author.Id.Id.ToString();
+                var authorUserName = message.Author.Username.ToString();
+                ProgHelpers.persistedData.RemoveNotMe(authorId, authorUserName);
+
+                textChannel.CreateMessage($"<@"+authorId+"> " + ProgHelpers.locale["yesCap.text"]);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("EX-!YesCap" + " --- " + DateTime.Now);
             }
         }
 
@@ -893,6 +945,13 @@ namespace K8GatherBot
                     //Dispose readychecks
                     ProgHelpers.readycheckids.Clear();
                     ProgHelpers.readycheck.Clear();
+
+                    //Run captain candidates run
+                    ProgHelpers.cptrandom = ProgHelpers.queue;
+                    ProgHelpers.cptrandomids = ProgHelpers.queueids;
+                    //--> Run checks against persisted data, remove all that are found in the file (foreach run)
+                    //--> Run random against this updated list, then run a FindIndexOf against queueids list --> We have a captain #1 
+                    // -> Remove him from cptrandom list -> Run another randoming -> Run check against queueids -> We have captain #2 -> Reset the cptrandom lists
 
                     //Random captain 1
                     Random rnd = new Random();
@@ -1027,7 +1086,6 @@ namespace K8GatherBot
                 Console.WriteLine("EX-!add" + " --- " + DateTime.Now);
             }
         }
-
         private void HandleAdd(DiscordMessage message, ITextChannel textChannel, string authorId, string authorUserName)
         {
             if (ProgHelpers.queue == null) {

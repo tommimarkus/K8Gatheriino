@@ -12,11 +12,13 @@ namespace K8GatherBot
         private string highScoreFileName = "highscores.csv";
         private string thinkidFileName = "thinkid.csv";
         private string captainsFileName = "captains.csv";
+        private string notmeFileName = "preventcaptain.csv"; //Addition 12-2017, prevents captainship
 
         private List<UserData> fatKids = new List<UserData>();
         private List<UserData> highScores = new List<UserData>();
         private List<UserData> thinKids = new List<UserData>();
         private List<UserData> captains = new List<UserData>();
+        private List<UserData> notMes = new List<UserData>();  //Addition 12-2017, prevents captainship
 
         public PersistedData()
         {
@@ -28,6 +30,7 @@ namespace K8GatherBot
             InitList(thinKids, thinkidFileName);
             InitList(highScores, highScoreFileName);
             InitList(captains, captainsFileName);
+            InitList(notMes, notmeFileName);  //Addition 12-2017, prevents captainship
         }
 
         private void InitList(List<UserData> data, string fileName)
@@ -81,6 +84,18 @@ namespace K8GatherBot
             PersistList(captains, captainsFileName);
         }
 
+        public void AddNotMe(string id, string userName) //Addition 12-2017, prevents captainship
+        {
+            Add(notMes, id, userName);
+            PersistList(notMes, notmeFileName);
+        }
+
+        public void RemoveNotMe(string id, string userName) //Addition 12-2017, prevents captainship
+        {
+            Remove(notMes, id, userName);
+            PersistList(notMes, notmeFileName);
+        }
+
         private void Add(List<UserData> data, string id, string userName) {
             UserData entry = data.Find(x => x.id.Equals(id));
 
@@ -91,6 +106,23 @@ namespace K8GatherBot
                 entry.userName = userName;
             } 
             entry.Add();
+        }
+
+        //Addition 12-2017, Removetool
+        private void Remove(List<UserData> data, string id, string userName)
+        {
+            UserData entry = data.Find(x => x.id.Equals(id));
+
+            if (entry != null)
+            {
+                Console.WriteLine("Match found for Remove-tool");
+                data.Remove(entry);
+            }
+            else
+            {
+                Console.WriteLine("No match found for Remove-tool");
+                //Do nothing, match not found!
+            }
         }
 
         public string GetFatKidInfo(Tuple<string, string> idUsername, string response) {
