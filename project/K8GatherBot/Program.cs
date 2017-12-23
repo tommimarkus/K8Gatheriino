@@ -946,44 +946,63 @@ namespace K8GatherBot
                     ProgHelpers.readycheckids.Clear();
                     ProgHelpers.readycheck.Clear();
 
-                    //Run captain candidates run
+                    //Run captain candidates run, create a clone of the queue temporarily.
                     ProgHelpers.cptrandom = ProgHelpers.queue;
                     ProgHelpers.cptrandomids = ProgHelpers.queueids;
+
                     //--> Run checks against persisted data, remove all that are found in the file (foreach run)
-                    //--> Run random against this updated list, then run a FindIndexOf against queueids list --> We have a captain #1 
-                    // -> Remove him from cptrandom list -> Run another randoming -> Run check against queueids -> We have captain #2 -> Reset the cptrandom lists
+                    //ProgHelpers.persistedData.GetNotMe()
+                    //DONE: --> Run random against this updated list, then run a FindIndexOf against queueids list --> We have a captain #1
+                    //DONE: -> Remove him from cptrandom list -> Run another randoming -> Run check against queueids -> We have captain #2 -> Reset the cptrandom lists
 
                     //Random captain 1
                     Random rnd = new Random();
-                    int c1 = rnd.Next(ProgHelpers.queueids.Count);
+                    int c1h = rnd.Next(ProgHelpers.cptrandomids.Count);
+                    string c1hid = ProgHelpers.cptrandomids[c1h];
+                    int c1index = ProgHelpers.queueids.IndexOf(c1hid);
+                    
+                    //int c1 = rnd.Next(ProgHelpers.queueids.Count);
                     string c1n = "";
                     string c1i = "";
 
-                    c1n = ProgHelpers.queue[c1];
-                    c1i = ProgHelpers.queueids[c1];
-                    ProgHelpers.queue.RemoveAt(c1);
-                    ProgHelpers.queueids.RemoveAt(c1);
+                    c1n = ProgHelpers.queue[c1index];
+                    c1i = ProgHelpers.queueids[c1index];
+                    ProgHelpers.queue.RemoveAt(c1index);
+                    ProgHelpers.queueids.RemoveAt(c1index);
                     ProgHelpers.captain1 = c1n;
                     ProgHelpers.captain1id = c1i;
                     ProgHelpers.team1.Add(c1n);
                     ProgHelpers.team1ids.Add(c1i);
 
+                    //Remove captain 1 from randoming pool
+                    ProgHelpers.cptrandom.RemoveAt(c1h);
+                    ProgHelpers.cptrandomids.RemoveAt(c1h);
+
+
                     //Random captain 2
                     Random rnd2 = new Random();
-                    int c2 = rnd2.Next(ProgHelpers.queueids.Count);
+                    int c2h = rnd.Next(ProgHelpers.cptrandomids.Count);
+                    string c2hid = ProgHelpers.cptrandomids[c2h];
+                    int c2index = ProgHelpers.queueids.IndexOf(c2hid);
+
+                    //int c2 = rnd2.Next(ProgHelpers.queueids.Count);
                     string c2n = "";
                     string c2i = "";
 
-                    c2n = ProgHelpers.queue[c2];
-                    c2i = ProgHelpers.queueids[c2];
-                    ProgHelpers.queue.RemoveAt(c2);
-                    ProgHelpers.queueids.RemoveAt(c2);
+                    c2n = ProgHelpers.queue[c2index];
+                    c2i = ProgHelpers.queueids[c2index];
+                    ProgHelpers.queue.RemoveAt(c2index);
+                    ProgHelpers.queueids.RemoveAt(c2index);
                     ProgHelpers.captain2 = c2n;
                     ProgHelpers.captain2id = c2i;
                     ProgHelpers.team2.Add(c2n);
                     ProgHelpers.team2ids.Add(c2i);
 
                     ProgHelpers.persistedData.AddCaptains(c1i, c1n, c2i, c2n);
+
+                    //Clear temporary captain list
+                    ProgHelpers.cptrandom.Clear();
+                    ProgHelpers.cptrandomids.Clear();
 
                     //Workaround to keep the initial numbering active for whole draft
                     ProgHelpers.draftchatids.AddRange(ProgHelpers.queueids);

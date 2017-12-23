@@ -84,6 +84,19 @@ namespace K8GatherBot
             PersistList(captains, captainsFileName);
         }
 
+        public void GetNotMe(List<UserData> notMes,string id, string userName)
+        {
+            UserData entry = notMes.Find(x => x.id.Equals(id));
+            if (entry == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
         public void AddNotMe(string id, string userName) //Addition 12-2017, prevents captainship
         {
             Add(notMes, id, userName);
