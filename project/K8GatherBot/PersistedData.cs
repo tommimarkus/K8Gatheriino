@@ -84,7 +84,7 @@ namespace K8GatherBot
             PersistList(captains, captainsFileName);
         }
 
-        public void GetNotMe(List<UserData> notMes,string id, string userName)
+        public void GetNotMe(List<UserData> notMes,string id, string userName) //Work in progress, this might not even be a good starting point.
         {
             UserData entry = notMes.Find(x => x.id.Equals(id));
             if (entry == null)

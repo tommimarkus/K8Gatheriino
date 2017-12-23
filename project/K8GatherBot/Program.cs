@@ -950,8 +950,8 @@ namespace K8GatherBot
                     ProgHelpers.cptrandom = ProgHelpers.queue;
                     ProgHelpers.cptrandomids = ProgHelpers.queueids;
 
-                    //--> Run checks against persisted data, remove all that are found in the file (foreach run)
-                    //ProgHelpers.persistedData.GetNotMe()
+                    //TODO: --> Run checks against persisted data, remove all that are found in the file (foreach run)
+                    //TODO: ForEach function... ProgHelpers.persistedData.GetNotMe()
                     //DONE: --> Run random against this updated list, then run a FindIndexOf against queueids list --> We have a captain #1
                     //DONE: -> Remove him from cptrandom list -> Run another randoming -> Run check against queueids -> We have captain #2 -> Reset the cptrandom lists
 
