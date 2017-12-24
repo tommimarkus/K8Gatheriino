@@ -81,6 +81,25 @@ namespace K8GatherBot
             PersistList(captains, captainsFileName);
         }
 
+        public void AddCaptain(string cid, string cUserName1)
+        {
+            Add(captains, cid, cUserName1);
+            PersistList(captains, captainsFileName);
+        }
+
+        public void RemoveCaptain(string cid, string cUserName) {
+            Minus(captains, cid, cUserName);
+            PersistList(captains, captainsFileName);
+        }
+
+        private void Minus(List<UserData> data, string id, string userName)
+        {
+            UserData entry = data.Find(x => x.id.Equals(id));
+            if(entry != null) {
+                entry.Minus();
+            }
+        }
+
         private void Add(List<UserData> data, string id, string userName) {
             UserData entry = data.Find(x => x.id.Equals(id));
 
@@ -186,6 +205,10 @@ namespace K8GatherBot
 
         internal void Add() {
             count++;
+        }
+
+        internal void Minus() {
+            count--;
         }
     }
 }

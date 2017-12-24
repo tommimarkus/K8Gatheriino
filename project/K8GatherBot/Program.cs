@@ -152,6 +152,8 @@ namespace K8GatherBot
             fi.Add("captain.top10", "Top10 kapteenit");
             fi.Add("captain.statusSingle", "{0} on valittu kapteeniksi {1} kertaa ({2}/{3})");
             fi.Add("player.stats", "pelaajan tiedot");
+            fi.Add("relinq.pickPhaseStarted", "Olet jo valinnut pelaajan, liian myöhäistä luopua tehtävästä.");
+            fi.Add("relinq.successful", "Luovuit kapteeninhommista onnistuneesti, uusi kapteeni on: ");
 
             en.Add("pickPhase.alreadyInProcess", "Please wait until the previous queue is handled.");
             en.Add("queuePhase.added", "Added!");
@@ -203,6 +205,8 @@ namespace K8GatherBot
             en.Add("captain.top10", "Top10 Captains");
             en.Add("captain.statusSingle", "{0} has been selected captain {1} times ({2}/{3}");
             en.Add("player.stats", "Player statistics");
+            en.Add("relinq.pickPhaseStarted", "You have already picked a player, too late to drop out of picking phase");
+            en.Add("relinq.successful", "Captainship relinquished successfully, new captain is: ");
         }
 
         public async Task Run()
@@ -324,6 +328,12 @@ namespace K8GatherBot
                 case "!r":
                     await CmdReady(shard, message);
                     break;
+                case "!wimp":
+                case "!nofuckingway":
+                case "!noob":
+                case "!relinquish":
+                    await CmdRelinquishCaptainship(shard, message);
+                    break;
                 case "!pick":
                 case "!p":
                     await CmdPick(shard, message);
@@ -421,7 +431,7 @@ namespace K8GatherBot
                     .AddField(ProgHelpers.locale["info.developer"] + " ", "kitsun8 & pirate_patch", false)
                     .AddField(ProgHelpers.locale["info.purpose"] + " ", ProgHelpers.locale["info.purposeAnswer"], false)
                     .AddField(ProgHelpers.locale["info.funFact"] + " ", ProgHelpers.locale["info.funFactAnswer"], false)
-                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10/fat10, !fatkid, !top10/topten, !hs/highscore, !tk10, !thinkid, !c10, !captain", false)
+                    .AddField(ProgHelpers.locale["info.commands"] + " ", "!add, !remove/rm, !ready/r, !pick/p, !gatherinfo/gi, !gstatus/gs, !resetbot, !f10/fat10, !fatkid, !top10/topten, !hs/highscore, !tk10, !thinkid, !c10, !captain, !relinquish", false)
                 ));
 
                 Console.WriteLine($"!gatherinfo - " + message.Author.Username + "-" + message.Author.Id + " --- " + DateTime.Now);
@@ -681,6 +691,97 @@ namespace K8GatherBot
             Thread.Sleep(100);
             HandleReady(message, textChannel, "333", "spede");
             Thread.Sleep(100);
+//            ChangeCaptain("team1", "111", "kerpo", textChannel);
+
+        }
+
+        private async Task CmdRelinquishCaptainship(Shard shard, DiscordMessage message) {
+
+            ITextChannel textChannel = (ITextChannel)shard.Cache.Channels.Get(message.ChannelId);
+            var authorId = message.Author.Id.Id.ToString();
+            var authorUserName = message.Author.Username.ToString();
+
+            if (ProgHelpers.captain1id == null && ProgHelpers.captain2id == null) {
+                // no captains
+                return;
+            }
+            string team = "team1";
+            if (ProgHelpers.captain1id.Equals(authorId))
+            {
+                team = "team1";
+            } else if(ProgHelpers.captain2id.Equals(authorId)) {
+                team = "team2";
+            }
+            if(!team.Equals("")) {
+                ChangeCaptain(team, authorId, authorUserName, textChannel);
+            }
+        }
+
+        private void ChangeCaptain(String team, string authorId, string authorUseName, ITextChannel textChannel) {
+            if ((team.Equals("team1") && ProgHelpers.team1ids.Count > 1)
+                || (team.Equals("team2") && ProgHelpers.team2ids.Count > 1))
+            {
+                textChannel.CreateMessage($"<@{authorId}> " + ProgHelpers.locale["relinq.pickPhaseStarted"]);
+                return;
+            }
+            Random rnd = new Random();
+            int newCap = rnd.Next(ProgHelpers.queueids.Count);
+            string c1n = "";
+            string c1i = "";
+            c1n = ProgHelpers.queue[newCap];
+            c1i = ProgHelpers.queueids[newCap];
+
+            ProgHelpers.queue[newCap] = authorUseName;
+            ProgHelpers.queueids[newCap] = authorId;
+            ProgHelpers.draftchatnames[newCap] = newCap + " - " + authorUseName;
+            ProgHelpers.draftchatids[newCap] = authorId;
+
+            string nextTeam = team;
+            if (ProgHelpers.pickturn == authorId) 
+            {
+                nextTeam = team.Equals("team1") ? "team2" : "team1";
+                ProgHelpers.pickturn = authorId;
+            }
+
+            ProgHelpers.persistedData.RemoveCaptain(authorId, authorUseName);
+            ProgHelpers.persistedData.AddCaptain(c1i, c1n);
+
+            if (team.Equals("team1"))
+            {
+                ProgHelpers.captain1 = c1n;
+                ProgHelpers.captain1id = c1i;
+                ProgHelpers.team1.Clear();
+                ProgHelpers.team1ids.Clear();
+                ProgHelpers.team1.Add(c1n);
+                ProgHelpers.team1ids.Add(c1i);
+            } else 
+            {
+                ProgHelpers.captain2 = c1n;
+                ProgHelpers.captain2id = c1i;
+                ProgHelpers.team2.Clear();
+                ProgHelpers.team2ids.Clear();
+                ProgHelpers.team2.Add(c1n);
+                ProgHelpers.team2ids.Add(c1i);
+            }
+            textChannel.CreateMessage($"<@{authorId}> " + ProgHelpers.locale["relinq.successful"] + $" <@{c1i}>");
+            if (ProgHelpers.team1ids.Count > 2) 
+            {
+                textChannel.CreateMessage($"<@{authorId}> " + ProgHelpers.locale["pickPhase." + (nextTeam) + "Turn"] + " <@" + ProgHelpers.pickturn + "> \n " + ProgHelpers.locale["pickPhase.unpicked"] + " \n" + string.Join("\n", ProgHelpers.draftchatnames.Cast<string>().ToArray()));   
+            } else 
+            {
+                List<string> phlist = new List<string>();
+                int count = 0;
+                foreach (string item in ProgHelpers.queue)
+                {
+                    phlist.Add(count.ToString() + " - " + item);
+                    count++;
+                }
+                textChannel.CreateMessage(ProgHelpers.locale["pickPhase.started"] + " " + "<@" + ProgHelpers.captain1id + ">" + "\n"
+                                          + ProgHelpers.locale["pickPhase.team2Captain"] + " " + "<@" + ProgHelpers.captain2id + ">" + "\n" + ProgHelpers.locale["pickPhase.instructions"]
+                                          + "\n \n" + string.Join("\n", phlist.Cast<string>().ToArray()));
+            }
+
+
         }
 
         private bool PickTeamMember(ITextChannel textChannel, DiscordUser author, string msg, List<string> teamIds, List<string> team, string nextCaptain)
