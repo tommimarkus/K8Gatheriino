@@ -339,7 +339,7 @@ namespace K8GatherBot
                     await CmdPick(shard, message);
                     break;
                 case "!fakeriino": 
-                    //CmdFakeriino(shard, message);
+                    CmdFakeriino(shard, message);
                     break;
                 case "!pstats":
                     await CmdPlayerStats(shard, message);
@@ -701,7 +701,7 @@ namespace K8GatherBot
             var authorId = message.Author.Id.Id.ToString();
             var authorUserName = message.Author.Username.ToString();
 
-            if (ProgHelpers.captain1id == null && ProgHelpers.captain2id == null) {
+            if (ProgHelpers.captain1id == "" && ProgHelpers.captain2id == "") {
                 // no captains
                 return;
             }
