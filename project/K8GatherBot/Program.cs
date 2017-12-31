@@ -733,8 +733,9 @@ namespace K8GatherBot
 
             ProgHelpers.queue[newCap] = authorUseName;
             ProgHelpers.queueids[newCap] = authorId;
-            ProgHelpers.draftchatnames[newCap] = newCap + " - " + authorUseName;
-            ProgHelpers.draftchatids[newCap] = authorId;
+            int draftIndex = ProgHelpers.draftchatids.IndexOf(c1i);
+            ProgHelpers.draftchatnames[draftIndex] = newCap + " - " + authorUseName;
+            ProgHelpers.draftchatids[draftIndex] = authorId;
 
             string nextTeam = team;
             if (ProgHelpers.pickturn == authorId) 
