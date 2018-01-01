@@ -5,7 +5,7 @@
 ![alt text](https://github.com/kitsun8/K8Gatheriino/blob/master/screenshots/gatheriino4.PNG)
 
 A bot for Discord that helps people to form pickup games (PUGs).
-Originally for Overwatch, but as the team size can be changed, works with any team based game.
+Originally for Overwatch, but as the team size can be changed from settings, works with any team based game.
 
 # What it does
 
@@ -14,14 +14,28 @@ Originally for Overwatch, but as the team size can be changed, works with any te
 2. Asks players to Ready up inside Y amount of time.
 3. Kicks unreadied players out of the queue.
 4. Decides 2 random team captains.
+4a. Allows Randomed captain to pass captainship to someone with more experience
 5. Allows captains to pick X amount of players to teams, 1 by 1.
 6. Announces teams when all players have been picked.
+
+# Extra features
+1. Keeps track of played games for users
+2. Keeps track of first picks of users
+3. Keeps track of last picks of users
+4. Keeps track of captainships of users
+4. Sorts users to top10 played list
+5. Sorts users to top10 last picked list
+6. Sorts users to top10 first picked list
+7. Allows fetching individual userstats card
+8. Allows players to never get randomed as captain
 
 # Details
 
 Bot is running on Discore 2.4.1 (https://github.com/BundledSticksInkorperated/Discore)
 
 Project is running on .NET Core 1.1 / .NET Standard 1.6
+
+Authors: kitsun8 & pirate_patch of SuomiOW Discord (Finnish Overwatch community, https://discord.gg/tKezvfH)
 
 Language support added for english, default/original language was finnish. Can be changed from appsettings.json
 Thanks to hpr's additions, the bot also keeps track of players' statistics in separate CSV files. If the files are nonexistent, they will be created.
