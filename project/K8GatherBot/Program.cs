@@ -724,15 +724,15 @@ namespace K8GatherBot
                 textChannel.CreateMessage($"<@{authorId}> " + ProgHelpers.locale["relinq.pickPhaseStarted"]);
                 return;
             }
-            Random rnd = new Random();
-            int newCap = rnd.Next(ProgHelpers.queueids.Count);
+            Random rnd = new Random(); //Random a new captain
+            int newCap = rnd.Next(ProgHelpers.queueids.Count); //Rnd index from the current playerpool (-2 of total players)
             string c1n = "";
             string c1i = "";
             c1n = ProgHelpers.queue[newCap];
             c1i = ProgHelpers.queueids[newCap];
 
-            ProgHelpers.queue[newCap] = authorUseName;
-            ProgHelpers.queueids[newCap] = authorId;
+            ProgHelpers.queue[newCap] = authorUseName; //Place the old captain in place of the new captain in the playerpool
+            ProgHelpers.queueids[newCap] = authorId; //Place the old captain in place of the new captain in the playerpool
             int draftIndex = ProgHelpers.draftchatids.IndexOf(c1i);
             ProgHelpers.draftchatnames[draftIndex] = newCap + " - " + authorUseName;
             ProgHelpers.draftchatids[draftIndex] = authorId;
@@ -740,12 +740,13 @@ namespace K8GatherBot
             string nextTeam = team;
             if (ProgHelpers.pickturn == authorId) 
             {
-                nextTeam = team.Equals("team1") ? "team2" : "team1";
-                ProgHelpers.pickturn = authorId;
+                nextTeam = team.Equals("team1") ? "team2" : "team1"; //Find out which team is picking
+                //ProgHelpers.pickturn = authorId; -- This was most likely a false statement
+                ProgHelpers.pickturn = c1i; //Place new captain in the picking turn
             }
 
-            ProgHelpers.persistedData.RemoveCaptain(authorId, authorUseName);
-            ProgHelpers.persistedData.AddCaptain(c1i, c1n);
+            ProgHelpers.persistedData.RemoveCaptain(authorId, authorUseName); //Statistics manipulation, old cap stats removed
+            ProgHelpers.persistedData.AddCaptain(c1i, c1n); //Statistics manipulation, new cap gets stats
 
             if (team.Equals("team1"))
             {
