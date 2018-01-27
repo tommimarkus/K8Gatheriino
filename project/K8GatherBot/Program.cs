@@ -705,7 +705,7 @@ namespace K8GatherBot
                 // no captains
                 return;
             }
-            string team = "team1";
+            string team = ""; //27.1.2018 - default value was "team1", testing empty variable as default might prevent possible bugs involving a non-captain doing !wimp.
             if (ProgHelpers.captain1id.Equals(authorId))
             {
                 team = "team1";
@@ -714,6 +714,10 @@ namespace K8GatherBot
             }
             if(!team.Equals("")) {
                 ChangeCaptain(team, authorId, authorUserName, textChannel);
+            }
+            else 
+            {
+                return; //27.1.2018 Just return if !wimp team variable doesn't result to anything, we don't need to announce anything because of non-captains doing !wimp
             }
         }
 
