@@ -1,0 +1,10 @@
+c:\users\niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.csproj.CoreCompileInputs.cache
+c:\users\niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.AssemblyInfoInputs.cache
+c:\users\niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.AssemblyInfo.cs
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.deps.json
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.runtimeconfig.json
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.runtimeconfig.dev.json
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.dll
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.pdb
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.dll
+C:\Users\Niki\source\repos\K8GatherBot-v2\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.pdb
