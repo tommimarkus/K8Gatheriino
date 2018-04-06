@@ -31,9 +31,9 @@ Originally for Overwatch, but as the team size can be changed from settings, wor
 
 # Details
 
-Bot is running on Discore 2.4.1 (https://github.com/BundledSticksInkorperated/Discore)
+Bot is running on Discore 4.1 (https://github.com/BundledSticksInkorperated/Discore)
 
-Project is running on .NET Core 1.1 / .NET Standard 1.6
+Project is running on .NET Core 2.1
 
 Authors: kitsun8 & pirate_patch of SuomiOW Discord (Finnish Overwatch community, https://discord.gg/tKezvfH)
 
