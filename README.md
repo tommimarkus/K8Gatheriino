@@ -33,7 +33,7 @@ Originally for Overwatch, but as the team size can be changed from settings, wor
 
 Bot is running on Discore 4.1 (https://github.com/BundledSticksInkorperated/Discore)
 
-Project is running on .NET Core 2.1
+Project is running on .NET Core 2.0 https://www.microsoft.com/net/download/all
 
 Authors: kitsun8 & pirate_patch of SuomiOW Discord (Finnish Overwatch community, https://discord.gg/tKezvfH)
 
