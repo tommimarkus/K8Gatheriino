@@ -31,7 +31,7 @@
           "lib/netstandard1.3/CsvHelper.dll": {}
         }
       },
-      "Discore/4.1.1": {
+      "Discore/4.1.2": {
         "type": "package",
         "dependencies": {
           "ConcurrentHashSet": "1.0.2",
@@ -1797,12 +1797,12 @@
         "lib/portable40-net40+sl5+win8+wp8+wpa81/CsvHelper.xml"
       ]
     },
-    "Discore/4.1.1": {
-      "sha512": "TpexFxR4COED49whilo1EAHaKHvO5YIvC/8LLKzKjGwuMlLz3Jm94rJAIrrFv4xZIMIpHCdQ6PVASOEgCaf/EA==",
+    "Discore/4.1.2": {
+      "sha512": "KzGFSPh46Mxp2H6AXtiM+7+7yjPQwaFxYu/xQ4TnaMWQoNK1AQNS7vN9ui70tiIubNWqrQIaC4KlcbK41dGXOw==",
       "type": "package",
-      "path": "discore/4.1.1",
+      "path": "discore/4.1.2",
       "files": [
-        "discore.4.1.1.nupkg.sha512",
+        "discore.4.1.2.nupkg.sha512",
         "discore.nuspec",
         "lib/netstandard1.5/Discore.dll",
         "lib/netstandard1.5/Discore.xml"
@@ -5959,7 +5959,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
       "CsvHelper >= 2.16.3",
-      "Discore >= 4.1.1",
+      "Discore >= 4.1.2",
       "Microsoft.Extensions.Configuration >= 2.0.1",
       "Microsoft.Extensions.Configuration.Abstractions >= 2.0.1",
       "Microsoft.Extensions.Configuration.Json >= 2.0.1",
@@ -5973,11 +5973,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Niki\\source\\repos\\K8GatherBot-v2\\K8GatherBot-v2\\K8GatherBotv2.csproj",
+      "projectUniqueName": "C:\\Users\\Niki\\Documents\\GitHub\\K8Gatheriino\\project\\K8GatherBot-v2\\K8GatherBotv2.csproj",
       "projectName": "K8GatherBotv2",
-      "projectPath": "C:\\Users\\Niki\\source\\repos\\K8GatherBot-v2\\K8GatherBot-v2\\K8GatherBotv2.csproj",
+      "projectPath": "C:\\Users\\Niki\\Documents\\GitHub\\K8Gatheriino\\project\\K8GatherBot-v2\\K8GatherBotv2.csproj",
       "packagesPath": "C:\\Users\\Niki\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Niki\\source\\repos\\K8GatherBot-v2\\K8GatherBot-v2\\obj\\",
+      "outputPath": "C:\\Users\\Niki\\Documents\\GitHub\\K8Gatheriino\\project\\K8GatherBot-v2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -6013,7 +6013,7 @@
           },
           "Discore": {
             "target": "Package",
-            "version": "[4.1.1, )"
+            "version": "[4.1.2, )"
           },
           "Microsoft.Extensions.Configuration": {
             "target": "Package",

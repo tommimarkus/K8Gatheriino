@@ -284,8 +284,24 @@ namespace K8GatherBotv2
         //------------------------------------------------------------------------Not Ready announce
         public async Task RunNotRdyannounce()
         {
-            Console.WriteLine(DateTime.Now + $" -- Running announce with existing shard -------------------------------------------");
-            await http.CreateMessage(ProgHelpers.channelsnowflake, ProgHelpers.locale["readyPhase.timeout"]);
+            Console.WriteLine(DateTime.Now + $" #! NOT READY ANNOUNCE START !#");
+            DiscordHttpClient http2;
+            http2 = new DiscordHttpClient(ProgHelpers.bottoken); //Use BOT token from settings
+            // Create a single shard.
+            using (Shard shard2 = new Shard(ProgHelpers.bottoken, 0, 1))
+            {
+                // Start the shard.
+                await shard2.StartAsync();
+                Console.WriteLine(DateTime.Now + $" -- New Shard Created -------------------------------------------");
+
+                // Wait for the shard to end before closing the program.
+                await http2.CreateMessage(ProgHelpers.channelsnowflake, ProgHelpers.locale["readyPhase.timeout"]);
+                Console.WriteLine(DateTime.Now + $" -- Attempted announce message -------------------------------------------");
+                await shard2.StopAsync();
+                Console.WriteLine(DateTime.Now + $" -- New Shard Stopped -------------------------------------------");
+                Console.WriteLine(DateTime.Now + $" #! NOT READY ANNOUNCE END !#");
+            }
+            
         }
 
         //------------------------------------------------------------------------Timer for ready check
@@ -381,7 +397,8 @@ namespace K8GatherBotv2
                 case "!nofuckingway":
                 case "!noob":
                 case "!relinquish":
-                    await CmdRelinquishCaptainship(shard, message);
+                    await http.CreateMessage(message.ChannelId, $"<@!{message.Author.Id}>" + " Äijä hei. Älä viitti. Yritä edes. :-)");
+                    //await CmdRelinquishCaptainship(shard, message);
                     break;
                 case "!pick":
                 case "!p":
