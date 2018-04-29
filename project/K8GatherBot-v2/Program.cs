@@ -714,7 +714,7 @@ namespace K8GatherBotv2
             {
                 Tuple<string, string> idUsername = ParseIdAndUsername(message);
                 Console.WriteLine("thinkid name split resulted in " + idUsername);
-                string thinKidInfo = ProgHelpers.persistedData.GetFatKidInfo(idUsername, ProgHelpers.locale["thinKid.statusSingle"]);
+                string thinKidInfo = ProgHelpers.persistedData.GetThinKidInfo(idUsername, ProgHelpers.locale["thinKid.statusSingle"]);
                 await http.CreateMessage(message.ChannelId, $"<@!{message.Author.Id}> " + thinKidInfo);
             }
             catch (Exception e)

@@ -13,7 +13,6 @@ C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\bin\Debug\net
 C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.runtimeconfig.dev.json
 C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.dll
 C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\bin\Debug\netcoreapp2.0\K8GatherBotv2.pdb
-C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.csprojResolveAssemblyReference.cache
 C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.csproj.CoreCompileInputs.cache
 C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.AssemblyInfoInputs.cache
 C:\Users\Niki\Documents\GitHub\K8Gatheriino\project\K8GatherBot-v2\obj\Debug\netcoreapp2.0\K8GatherBotv2.AssemblyInfo.cs
